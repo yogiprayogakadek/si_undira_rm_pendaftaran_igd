@@ -20,6 +20,16 @@
                 </li>
                 <!-- end -->
 
+                {{-- Data Dokter --}}
+                <li class="nav-item" data-target-form="#dokterDetailForm" role="presentation">
+                    <a href="#dokterDetail" data-bs-toggle="tab" data-toggle="tab" class="nav-link" aria-selected="true"
+                        role="tab">
+                        <i class="ph-duotone ph-user-circle"></i> <span class="d-none d-sm-inline">Data
+                            Dokter</span>
+                    </a>
+                </li>
+                <!-- end -->
+
                 {{-- Triase --}}
                 <li class="nav-item" data-target-form="#triaseForm" role="presentation">
                     <a href="#triase" data-bs-toggle="tab" data-toggle="tab" class="nav-link icon-btn"
@@ -122,43 +132,44 @@
                 <!-- end PASIEN -->
 
                 <!-- START: DOKTER -->
-                <div class="tab-pane active show" id="pasienDetail" role="tabpanel">
+                <div class="tab-pane" id="dokterDetail" role="tabpanel">
                     <div class="row mt-4">
                         <div class="col">
                             <div class="mb-3">
-                                <label class="form-label" for="nama">Nama</label>
-                                <select name="pasien_id" id="pasien_id" class="form-control">
-                                    @foreach ($pasien as $key => $item)
+                                <label class="form-label" for="doter_id">Nama</label>
+                                <select name="dokter_id" id="dokter_id" class="form-control">
+                                    @foreach ($dokter as $key => $item)
                                         <option value="{{ $key }}">{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="mb-3 data-pasien" hidden>
+                            <div class="mb-3 data-dokter" hidden>
                                 <label class="form-label" for="sip">SIP</label>
                                 <input type="text" name="sip" class="form-control sip" id="sip"
-                                    readonly placeholder="masukkan sip pasien">
+                                    readonly placeholder="masukkan sip dokter">
                                 <div class="invalid-feedback error-sip"></div>
                             </div>
-                            <div class="row data-pasien" hidden>
+                            <div class="row data-dokter" hidden>
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="tempat_lahir">Tempat Lahir</label>
-                                    <input type="text" name="tempat_lahir" class="form-control tempat_lahir"
-                                        id="tempat_lahir" readonly placeholder="masukkan tempat lahir pasien">
-                                    <div class="invalid-feedback error-tempat_lahir"></div>
+                                    <label class="form-label" for="tempat_lahir_dokter">Tempat Lahir</label>
+                                    <input type="text" name="tempat_lahir_dokter"
+                                        class="form-control tempat_lahir_dokter" id="tempat_lahir_dokter" readonly
+                                        placeholder="masukkan tempat lahir dokter">
+                                    <div class="invalid-feedback error-tempat_lahir_dokter"></div>
                                 </div>
                                 <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="tanggal_lahir">Tanggal Lahir</label>
-                                    <input type="text" name="tanggal_lahir"
-                                        class="form-control tanggal_lahir datepicker-input" id="tanggal_lahir"
-                                        readonly placeholder="masukkan tanggal lahir pasien">
-                                    <div class="invalid-feedback error-tanggal_lahir"></div>
+                                    <label class="form-label" for="tanggal_lahir_dokter">Tanggal Lahir</label>
+                                    <input type="text" name="tanggal_lahir_dokter"
+                                        class="form-control tanggal_lahir datepicker-input" id="tanggal_lahir_dokter"
+                                        readonly placeholder="masukkan tanggal lahir dokter_dokter">
+                                    <div class="invalid-feedback error-tanggal_lahir_dokter"></div>
                                 </div>
                             </div>
-                            <div class="mb-3 data-pasien" hidden>
-                                <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
-                                <input type="text" name="jenis_kelamin" class="form-control jenis_kelamin"
-                                    id="jenis_kelamin" readonly>
-                                <div class="invalid-feedback error-jenis_kelamin"></div>
+                            <div class="mb-3 data-dokter" hidden>
+                                <label class="form-label" for="jenis_kelamin_dokter">Jenis Kelamin</label>
+                                <input type="text" name="jenis_kelamin_dokter"
+                                    class="form-control jenis_kelamin_dokter" id="jenis_kelamin_dokter" readonly>
+                                <div class="invalid-feedback error-jenis_kelamin_dokter"></div>
                             </div>
                         </div>
                     </div>
@@ -454,7 +465,7 @@
                                                 value="Gawar Darurat" id="flexCheckChecked" checked>
                                             <label class="form-check-label" for="flexCheckChecked"><i
                                                     class="fa-sharp fa-solid fa-square fa-2xl"
-                                                    style="color: #FFD43B;"></i></label>
+                                                    style="color: #a1851f;"></i></label>
                                         </div>
                                     </div>
                                 </div>
@@ -502,6 +513,74 @@
                                 <textarea class="form-control" rows="4" disabled>Bila ada tanda tuberculosis seperti batuk lebih dari 2 minggu, demam hilang timbul lebih dari sebulan, berkeringat malam tanpa aktivitas, penurunan berat badan tanpa penyebab yang jelas, riwayat keluarga pengobatan TB, pasien wajib dikenakan masker</textarea>
                             </div>
                         </div>
+
+                        {{-- TTD --}}
+                        <div class="col-sm-3 offset-9 mt-3">
+                            <p class="text-center">Dokter</p>
+                            <p class="text-center">{{ QrCode::generate('yogi') }}</p>
+                            <h4 class="text-center" style="border-bottom: 2px solid #000; padding-bottom: 5px">
+                                Yogi
+                                Prayoga</h4>
+                            <p class="small text-center" style="margin-top: -0.2rem">SM/20020</p>
+                        </div>
+
+                        {{-- Kriteria Triase --}}
+                        <div class="col-sm-12">
+                            <div class="mb-3">
+                                <table class="table table-hover table-stripped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" class="text-center">Kriteria Triase</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-capitalize text-center"
+                                                style="background-color: #6d1d1d; color: white;">Gawat Darurat</th>
+                                            <th class="text-capitalize text-center"
+                                                style="background-color: #a1851f; color: white;">Gawat Tidak
+                                                Darurat</th>
+                                            <th class="text-capitalize text-center"
+                                                style="background-color: #0b6f1c; color: white;">Tidak Gawat Tidak
+                                                Darurat</th>
+                                            <th class="text-capitalize text-center"
+                                                style="background-color: #2a2828; color:white;">Meninggal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="white-space: normal !important">
+                                                <ol>
+                                                    <li>Memerlukan penanganan dengan segera karena dalam kondisi yang
+                                                        sangat kritis (tersumbatnya jalan nafas, syspnea, perdarahan
+                                                        masive, syok, penurunan kesadaran)
+                                                    </li>
+                                                </ol>
+                                            </td>
+                                            <td style="white-space: normal !important">
+                                                <ol>
+                                                    <li>Tidak memerlukan penanganan segera, dapat ditunda untuk beberapa
+                                                        jam</li>
+                                                    <li>Tanda-tanda vital lainnya stabil</li>
+                                                    <li>Kesadaran composmentis</li>
+                                                </ol>
+                                            </td>
+                                            <td style="white-space: normal !important">
+                                                <ol>
+                                                    <li>Pasien luka yang dapat berjalan sendiri</li>
+                                                    <li>Kondisi pasien stabil (dapat dilakukan rawat jalan)</li>
+                                                </ol>
+                                            </td>
+                                            <td style="white-space: normal !important">
+                                                <ol>
+                                                    <li>Pasien telah meninggal dunia atau tanda-tanda kehidupan
+                                                        menghilang</li>
+                                                </ol>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <!-- end TRIASE -->
@@ -595,6 +674,7 @@
         progress: true,
     });
 
+    // DETAIL PASIEN dan DOKTER
     $('#pasien_id').on('change', function() {
         let pasienId = $(this).find(":selected").val()
         if (pasienId) {
@@ -617,6 +697,26 @@
             $('#jenis_kelamin').val('')
         }
     })
+
+    $('#dokter_id').on('change', function() {
+        let dokterId = $(this).find(":selected").val()
+        if (dokterId) {
+            $.get("dokter/detail/" + dokterId, function(data) {
+                $('.data-dokter').prop('hidden', false)
+                $('#sip').val(data.sip)
+                $('#tempat_lahir_dokter').val(data.tempat_lahir)
+                $('#tanggal_lahir_dokter').val(data.tanggal_lahir)
+                $('#jenis_kelamin_dokter').val(data.jenis_kelamin)
+            });
+        } else {
+            $('.data-dokter').prop('hidden', true)
+            $('#sip').val('')
+            $('#tempat_lahir_dokter').val('')
+            $('#tanggal_lahir_dokter').val('')
+            $('#jenis_kelamin_dokter').val('')
+        }
+    })
+    // END
 
     // TRIASE
 

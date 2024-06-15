@@ -30,7 +30,7 @@ class DokumenController extends Controller
         $pasien = Pasien::all()->pluck('nama', 'id')->prepend('Pilih nama pasien....', '');
         $dokter = Dokter::all()->pluck('nama', 'id')->prepend('Pilih nama dokter....', '');
         $view = [
-            'data' => view('main.dokumen.create', compact('pasien'))->render(),
+            'data' => view('main.dokumen.create', compact('pasien', 'dokter'))->render(),
         ];
 
         return response()->json($view);

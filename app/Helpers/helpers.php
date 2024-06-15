@@ -15,9 +15,7 @@ function qrGenerator($nama, $sip)
 
     // return response($data)->header('Content-Type', 'image/png');
 
-    return QrCode::generate(
-        $nama . '_' . $sip
-    );
+    return QrCode::generate($nama . '_' . $sip);
 
     // $data = QrCode::format('png')
     //         ->merge('https://cdn-icons-png.flaticon.com/512/136/136524.png', .3, true)

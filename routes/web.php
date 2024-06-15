@@ -48,6 +48,8 @@ Route::namespace('Main')->group(function () {
             Route::post('/store', 'store')->name('store');
             Route::post('/update', 'update')->name('update');
             Route::post('/delete', 'delete')->name('delete');
+
+            Route::get('/detail/{id}', 'detail')->name('detail');
         });
 
     Route::controller('DokumenController')

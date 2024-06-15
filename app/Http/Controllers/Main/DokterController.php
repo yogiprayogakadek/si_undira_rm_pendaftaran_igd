@@ -106,4 +106,11 @@ class DokterController extends Controller
             ]);
         }
     }
+
+    public function detail($id)
+    {
+        $dokter = Dokter::find($id);
+
+        return response()->json($dokter);
+    }
 }
