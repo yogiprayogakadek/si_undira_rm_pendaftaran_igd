@@ -29840,3 +29840,18 @@ div.dataTables_wrapper div.dt-row {
 [data-pc-layout="compact"] [data-pc-layout="horizontal"] .pc-rtl {
     display: none;
 }
+
+/* ADDITIONAL */
+.vertical-align-top {
+    vertical-align: top !important;
+}
+
+.center-qr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#qrcode {
+    margin: auto;
+}

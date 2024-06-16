@@ -35,4 +35,9 @@ class DokumenController extends Controller
 
         return response()->json($view);
     }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+    }
 }
