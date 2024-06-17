@@ -15,10 +15,21 @@ return new class extends Migration
             $table->string('id', 50)->primary();
             $table->string('pasien_id', 50);
             $table->foreign('pasien_id')->references('id')->on('pasien')->onDelete('cascade');
+            $table->json('cara_datang');
+            $table->json('transportasi');
+            $table->enum('jenis_kasus', ['Trauma', 'Non Trauma']);
+            $table->date('tanggal');
+            $table->time('jam');
+            $table->text('keluhan_utama');
+            $table->enum('respon', ['Alert', 'Verbal', 'Pain', 'Unrespon']);
+            $table->enum('airway', ['Bebas', 'Gurgling', 'Stridor', 'Wheezing', 'Ronchi', 'Terintubasi']);
+            $table->enum('breathing', ['Spontan', 'Tachipneu', 'Dispneu', 'Apneu', 'Ventilasi Mekanik', 'Memakai BVM']);
+            $table->json('circulation');
+            $table->json('disability');
+            $table->enum('kategori', ['Gawat Darurat', 'Gawat Tidak Darurat', 'Tidak Gawat Tidak Darurat', 'Meninggal']);
+            $table->string('dokumen');
             $table->string('dokter_id', 50);
             $table->foreign('dokter_id')->references('id')->on('dokter')->onDelete('cascade');
-            $table->json('data_triase');
-            $table->string('dokumen');
             $table->timestamps();
         });
     }

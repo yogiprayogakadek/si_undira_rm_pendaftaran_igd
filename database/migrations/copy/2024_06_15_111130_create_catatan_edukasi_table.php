@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('asesmen', function (Blueprint $table) {
+        Schema::create('catatan_edukasi', function (Blueprint $table) {
             $table->string('id', 50)->primary();
             $table->string('pasien_id', 50);
             $table->foreign('pasien_id')->references('id')->on('pasien')->onDelete('cascade');
+            // $table->string('ruangan', 100);
+            $table->json('data_edukasi');
+            $table->string('dokumen');
             $table->string('dokter_id', 50);
             $table->foreign('dokter_id')->references('id')->on('dokter')->onDelete('cascade');
-            $table->json('data_asesmen');
-            $table->string('dokumen');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asesmen');
+        Schema::dropIfExists('catatan_edukasi');
     }
 };

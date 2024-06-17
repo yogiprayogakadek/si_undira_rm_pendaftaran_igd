@@ -23,4 +23,9 @@ class Asesmen extends Model
             $model->id = str_replace('-','',Uuid::uuid4()->getHex());
         });
     }
+
+    public function dokter()
+    {
+        return $this->hasOne(Dokter::class, 'dokter_id');
+    }
 }

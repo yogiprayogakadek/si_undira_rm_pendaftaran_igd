@@ -26,21 +26,21 @@ class Pasien extends Model
 
     public function triase()
     {
-        return $this->hasOne(Triase::class, 'pengguna_id');
+        return $this->hasOne(Triase::class, 'pasien_id');
     }
 
     public function asesmen()
     {
-        return $this->hasOne(Asesmen::class, 'pengguna_id');
+        return $this->hasOne(Asesmen::class, 'pasien_id');
     }
 
     public function catatanEdukasi()
     {
-        return $this->hasOne(CatatanEdukasi::class, 'pengguna_id');
+        return $this->hasOne(CatatanEdukasi::class, 'pasien_id');
     }
 
     public function ringkasanKondisi()
     {
-        return $this->hasOne(RingkasanKondisi::class, 'pengguna_id');
+        return $this->hasOne(RingkasanKondisi::class, 'pasien_id');
     }
 }

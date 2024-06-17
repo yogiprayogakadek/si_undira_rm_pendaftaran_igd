@@ -15,15 +15,18 @@
                 <table class="table table-striped table-hover table-bordered" id="table">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>No. Rekam Medis</th>
-                            <th>NIK</th>
-                            <th>Nama</th>
-                            <th>Tempat/Tanggal Lahir</th>
-                            <th>Alamat</th>
-                            <th>Jenis Kelamin</th>
-                            <th>No. Telepon</th>
-                            <th>Aksi</th>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">No. Rekam Medis</th>
+                            <th rowspan="2">NIK</th>
+                            <th rowspan="2">Nama</th>
+                            <th colspan="4" class="text-center">Dokumen</th>
+                            <th rowspan="2">Aksi</th>
+                        </tr>
+                        <tr>
+                            <th>Triase</th>
+                            <th>Asesmen</th>
+                            <th>Catatan Edukasi</th>
+                            <th>Ringkasan Kondisi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,12 +36,18 @@
                                 <td>{{ $pasien->nomor_rm }}</td>
                                 <td>{{ $pasien->nik }}</td>
                                 <td>{{ $pasien->nama }}</td>
-                                <td>{{ $pasien->tempat_lahir }},
-                                    {{ date_format(date_create($pasien->tanggal_lahir), 'd M Y') }}
+                                <td class="text-center">
+                                    <a href="{{ $pasien->triase->dokumen }}" target="_blank">Lihat</a>
                                 </td>
-                                <td>{{ $pasien->alamat }}</td>
-                                <td>{{ $pasien->jenis_kelamin }}</td>
-                                <td>{{ $pasien->nomor_telp ?? '-' }}</td>
+                                <td class="text-center">
+                                    <a href="{{ $pasien->asesmen->dokumen }}" target="_blank">Lihat</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ $pasien->catatanEdukasi->dokumen }}" target="_blank">Lihat</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ $pasien->ringkasanKondisi->dokumen }}" target="_blank">Lihat</a>
+                                </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="button groups">
                                         <button type="button" class="btn btn-light-success btn-edit"

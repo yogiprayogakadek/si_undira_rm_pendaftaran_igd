@@ -21,7 +21,7 @@ class DokumenController extends Controller
 
     public function render()
     {
-        $pasien = Pasien::with(['triase', 'asesmen', 'catatanEdukasi', 'ringkasanKondisi'])->whereHas('triase')->get();
+        $pasien = Pasien::all();
 
         $view = [
             'data' => view('main.dokumen.render', compact('pasien'))->render(),
@@ -79,7 +79,7 @@ class DokumenController extends Controller
                 $catatanKeteranganEvaluasiKey = 'catatan_keterangan_evaluasi_' . $index;
 
                 return [
-                    'hambatan' => encodeJson($request->$hambatanKey, $request->$hambatanKey == 'Tidak' ? '' : $request->$hambatanLainnyaKey),
+                    'hambatan' => encodeJson($request->$hambatanKey, $request->$hambatanKey == 'Tidak' ? '-' : $request->$hambatanLainnyaKey),
                     'metode' => $request->$catatanMetodeKey,
                     'durasi' => $request->$catatanDurasiKey,
                     'keterangan_evaluasi' => $request->$catatanKeteranganEvaluasiKey,
@@ -89,20 +89,11 @@ class DokumenController extends Controller
             function caraKeluar($option, $description, $descriptionIfAllowedToGoHome)
             {
                 if ($option == 'Kabur') {
-                    return [
-                        'option' => $option,
-                        'deskripsi' => '',
-                    ];
+                    return encodeJson($option, '');
                 } elseif ($option == 'Diperbolehkan Pulang') {
-                    return [
-                        'option' => $option,
-                        'deskripsi' => $descriptionIfAllowedToGoHome,
-                    ];
+                    return encodeJson($option, $descriptionIfAllowedToGoHome);
                 } else {
-                    return [
-                        'option' => $option,
-                        'deskripsi' => $description,
-                    ];
+                    return encodeJson($option, $description);
                 }
             }
 
@@ -110,38 +101,36 @@ class DokumenController extends Controller
             $triase = [
                 'pasien_id' => $pasien_id,
                 'dokter_id' => $dokter_id,
-                'data_triase' => json_encode([
-                    'tanggal' => date_format(date_create($request->tanggal_triase), 'Y-m-d'),
-                    'jam' => $request->jam_triase,
-                    'jenis_kasus' => $request->jenis_kasus,
-                    'keluhan_utama' => $request->keluhan_utama,
-                    'respon' => $request->respon,
-                    'airway' => $request->airway,
-                    'breathing' => $request->breathing,
-                    'kategori' => $request->kategori_triase,
-                    'cara_datang' => [
-                        'option' => $request->cara_datang,
-                        'deskripsi' => $request->cara_datang_lainnya,
-                    ],
-                    'transportasi' => [
-                        'option' => $request->transportasi,
-                        'deskripsi' => $request->transportasi_lainnya,
-                    ],
-                    'circulation' => [
-                        'nadi' => $request->nadi,
-                        'crt' => $request->crt,
-                        'saturasi_oksigen' => $request->saturasi_oksigen,
-                        'warna_kulit' => $request->warna_kulit,
-                        'perdarahan' => $request->perdarahan,
-                        'turgor_kulit' => $request->turgor_kulit,
-                    ],
-                    'disability' => [
-                        'gcs_e' => $request->gcs_e,
-                        'gcs_v' => $request->gcs_v,
-                        'gcs_m' => $request->gcs_m,
-                        'pupil' => $request->pupil,
-                        'reflek_pupil' => $request->reflek_pupil,
-                    ],
+                'tanggal' => date_format(date_create($request->tanggal_triase), 'Y-m-d'),
+                'jam' => $request->jam_triase,
+                'jenis_kasus' => $request->jenis_kasus,
+                'keluhan_utama' => $request->keluhan_utama,
+                'respon' => $request->respon,
+                'airway' => $request->airway,
+                'breathing' => $request->breathing,
+                'kategori' => $request->kategori_triase,
+                'cara_datang' => json_encode([
+                    'option' => $request->cara_datang,
+                    'deskripsi' => $request->cara_datang_lainnya,
+                ]),
+                'transportasi' => json_encode([
+                    'option' => $request->transportasi,
+                    'deskripsi' => $request->transportasi_lainnya,
+                ]),
+                'circulation' => json_encode([
+                    'nadi' => $request->nadi,
+                    'crt' => $request->crt,
+                    'saturasi_oksigen' => $request->saturasi_oksigen,
+                    'warna_kulit' => $request->warna_kulit,
+                    'perdarahan' => $request->perdarahan,
+                    'turgor_kulit' => $request->turgor_kulit,
+                ]),
+                'disability' => json_encode([
+                    'gcs_e' => $request->gcs_e,
+                    'gcs_v' => $request->gcs_v,
+                    'gcs_m' => $request->gcs_m,
+                    'pupil' => $request->pupil,
+                    'reflek_pupil' => $request->reflek_pupil,
                 ]),
             ];
 
@@ -149,53 +138,51 @@ class DokumenController extends Controller
             $asesmen = [
                 'pasien_id' => $pasien_id,
                 'dokter_id' => $dokter_id,
-                'data_asesmen' => json_encode([
-                    'tanggal' => date_format(date_create($request->tanggal_asesmen), 'Y-m-d'),
-                    'jam_kedatangan' => $request->jam_kedatangan_asesmen,
-                    'waktu_pengkajian' => $request->waktu_pengkajian,
-                    'anamnesis' => $request->anamnesis,
-                    'riwayat_penyakit' => $request->riwayat_penyakit,
-                    'riwayat_pengobatan' => $request->riwayat_pengobatan,
-                    'hasil_pemeriksaan_penunjang' => $request->hasil_pemeriksaan_penunjang,
-                    'diagnosis' => $request->diagnosis_asesmen,
-                    'rencana_tindakan' => $request->rencana_tindakan,
-                    'rencana_terapi' => $request->rencana_terapi,
-                    'rujukan' => [
-                        'option' => $request->rujukan,
-                        'deskripsi' => $request->rujukan_lainnya,
-                    ],
-                    'kesadaran' => [
-                        'gcs_e' => $request->asesmen_gcs_e,
-                        'gcs_v' => $request->asesmen_gcs_v,
-                        'gcs_m' => $request->asesmen_gcs_m,
-                    ],
-                    'tanda_vital' => [
-                        'td' => $request->td_asesmen,
-                        'n' => $request->n_asesmen,
-                        'r' => $request->r_asesmen,
-                        's' => $request->s_asesmen,
-                        'bb' => $request->bb_asesmen,
-                    ],
-                    'pemeriksaan_fisik' => [
-                        'kepala' => $request->kepala_asesmen,
-                        'leher' => $request->leher_asesmen,
-                        'thorak' => $request->thorak_asesmen,
-                        'abdomen' => $request->abdomen_asesmen,
-                        'extremitas_atas_bawah' => $request->extremitas_atas_bawah,
-                        'genetalia' => $request->genetalia_asesmen,
-                        'integumen' => $request->integumen_asesmen,
-                    ],
-                    'riwayat_alergi' => [
-                        'option' => $request->riwayat_alergi,
-                        'deskripsi' => ($request->riwayat_alergi == 'Tidak' || $request->riwayat_alergi == 'Tidak Tahu') ? '' : createAllergyArray($request)
-                    ],
-                    'nyeri' => [
-                        'option' => $request->nyeri_asesmen,
-                        'deskripsi' => $request->nyeri_asesmen == 'Tidak' ? '' : [
-                            'lokasi_nyeri' => $request->lokasi_nyeri_asesmen,
-                            'intensitas_nyeri' => $request->intensitas_nyeri_asesmen,
-                            'jenis_nyeri' => $request->jenis_nyeri_asesmen,
-                        ]
+                'tanggal' => date_format(date_create($request->tanggal_asesmen), 'Y-m-d'),
+                'jam_kedatangan' => $request->jam_kedatangan_asesmen,
+                'waktu_pengkajian' => $request->waktu_pengkajian,
+                'anamnesis' => $request->anamnesis,
+                'riwayat_penyakit' => $request->riwayat_penyakit,
+                'riwayat_pengobatan' => $request->riwayat_pengobatan,
+                'hasil_pemeriksaan_penunjang' => $request->hasil_pemeriksaan_penunjang,
+                'diagnosis' => $request->diagnosis_asesmen,
+                'rencana_tindakan' => $request->rencana_tindakan,
+                'rencana_terapi' => $request->rencana_terapi,
+                'rujukan' => json_encode([
+                    'option' => $request->rujukan,
+                    'deskripsi' => $request->rujukan_lainnya,
+                ]),
+                'kesadaran' => json_encode([
+                    'gcs_e' => $request->asesmen_gcs_e,
+                    'gcs_v' => $request->asesmen_gcs_v,
+                    'gcs_m' => $request->asesmen_gcs_m,
+                ]),
+                'tanda_vital' => json_encode([
+                    'td' => $request->td_asesmen,
+                    'n' => $request->n_asesmen,
+                    'r' => $request->r_asesmen,
+                    's' => $request->s_asesmen,
+                    'bb' => $request->bb_asesmen,
+                ]),
+                'pemeriksaan_fisik' => json_encode([
+                    'kepala' => $request->kepala_asesmen,
+                    'leher' => $request->leher_asesmen,
+                    'thorak' => $request->thorak_asesmen,
+                    'abdomen' => $request->abdomen_asesmen,
+                    'extremitas_atas_bawah' => $request->extremitas_atas_bawah,
+                    'genetalia' => $request->genetalia_asesmen,
+                    'integumen' => $request->integumen_asesmen,
+                ]),
+                'riwayat_alergi' => json_encode([
+                    'option' => $request->riwayat_alergi,
+                    'deskripsi' => ($request->riwayat_alergi == 'Tidak' || $request->riwayat_alergi == 'Tidak Tahu') ? '' : createAllergyArray($request)
+                ]),
+                'nyeri' => json_encode([
+                    'option' => $request->nyeri_asesmen,
+                    'deskripsi' => $request->nyeri_asesmen == 'Tidak' ? '-' : [
+                        'lokasi_nyeri' => $request->lokasi_nyeri_asesmen,
+                        'intensitas_nyeri' => $request->intensitas_nyeri_asesmen,
+                        'jenis_nyeri' => $request->jenis_nyeri_asesmen,
                     ],
                 ]),
             ];
@@ -204,10 +191,10 @@ class DokumenController extends Controller
             $catatanEdukasi = [
                 'pasien_id' => $pasien_id,
                 'dokter_id' => $dokter_id,
+                'tanggal' => date_format(date_create($request->tanggal_edukasi), 'Y-m-d'),
             ];
 
             $catatanDetail = [
-                'tanggal' => date_format(date_create($request->tanggal_edukasi), 'Y-m-d'),
                 'nama_dan_hubungan' => $request->nama_dan_hubungan,
                 'dokter_spesialis' => array_merge([
                     'data' => [
@@ -271,21 +258,19 @@ class DokumenController extends Controller
             $ringkasanKondisi = [
                 'pasien_id' => $pasien_id,
                 'dokter_id' => $dokter_id,
-                'data_ringkasan_kondisi' => json_encode([
-                    'tindak_lanjut_asuhan' => $request->tindak_lanjut_asuhan,
-                    'kondisi_keluar' => $request->ringkasan_kondisi_keluar,
-                    'keadaan_pasien' => [
-                        's' => $request->ringkasan_kondisi_s,
-                        'o' => $request->ringkasan_kondisi_o,
-                        'a' => $request->ringkasan_kondisi_a,
-                        'p' => $request->ringkasan_kondisi_p,
-                    ],
-                    'cara_keluar' => caraKeluar(
-                        $request->cara_keluar,
-                        $request->cara_keluar_lainnya,
-                        $request->cara_keluar_lainnya_3
-                    ),
+                'tindak_lanjut_asuhan' => $request->tindak_lanjut_asuhan,
+                'kondisi_keluar' => $request->ringkasan_kondisi_keluar,
+                'keadaan_pasien' => json_encode([
+                    's' => $request->ringkasan_kondisi_s,
+                    'o' => $request->ringkasan_kondisi_o,
+                    'a' => $request->ringkasan_kondisi_a,
+                    'p' => $request->ringkasan_kondisi_p,
                 ]),
+                'cara_keluar' => caraKeluar(
+                    $request->cara_keluar,
+                    $request->cara_keluar_lainnya,
+                    $request->cara_keluar_lainnya_3
+                ),
             ];
 
             // ================== FILE SCAN ==================== //
@@ -333,23 +318,5 @@ class DokumenController extends Controller
                 'title' => 'Gagal'
             ]);
         }
-    }
-
-    public function edit($id)
-    {
-        $data = Pasien::where('id', $id)->with(['triase', 'asesmen', 'catatanEdukasi', 'ringkasanKondisi'])->first();
-        $triase = json_decode($data->triase->data_triase);
-        $asesmen = json_decode($data->asesmen->data_asesmen);
-        $catatanEdukasi = json_decode($data->catatanEdukasi->data_edukasi);
-        $ringkasanKondisi = json_decode($data->ringkasanKondisi->data_ringkasan_kondisi);
-        // dd($triase->cara_datang->option);
-        $pasien = Pasien::all()->pluck('nama', 'id')->prepend('Pilih nama pasien....', '');
-        $dokter = Dokter::all()->pluck('nama', 'id')->prepend('Pilih nama dokter....', '');
-
-        $view = [
-            'data' => view('main.dokumen.edit', compact('pasien', 'dokter', 'data', 'triase', 'asesmen', 'catatanEdukasi', 'ringkasanKondisi'))->render(),
-        ];
-
-        return response()->json($view);
     }
 }

@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
-                <h5 class="mb-0 pasien-title">Data Pasien</h5>
+                <h5 class="mb-0 pasien-title">Data Dokumen Pasien</h5>
                 <button type="button" class="btn btn-shadow btn-primary btn-data">
                     <i class="fa-regular fa-hand-back-point-left"></i> List Data
                 </button>
@@ -68,6 +68,16 @@
                     </a>
                 </li>
                 <!-- end -->
+
+                {{-- File Scan --}}
+                <li class="nav-item" data-target-form="#fileScanForm" role="presentation">
+                    <a href="#fileScan" data-bs-toggle="tab" data-toggle="tab" class="nav-link icon-btn"
+                        aria-selected="false" role="tab" tabindex="-1">
+                        <i class="ph-duotone ph-check-circle"></i>
+                        <span class="d-none d-sm-inline">File Scan</span>
+                    </a>
+                </li>
+                <!-- end -->
             </ul>
         </div>
     </div>
@@ -89,7 +99,7 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label" for="nama">Nama</label>
-                                    <select name="pasien_id" id="pasien_id" class="form-control">
+                                    <select name="pasien_id" id="pasien_id" class="form-control pasien_id">
                                         @foreach ($pasien as $key => $item)
                                             <option value="{{ $key }}">{{ $item }}</option>
                                         @endforeach
@@ -139,7 +149,7 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label" for="doter_id">Nama</label>
-                                    <select name="dokter_id" id="dokter_id" class="form-control">
+                                    <select name="dokter_id" id="dokter_id" class="form-control dokter_id">
                                         @foreach ($dokter as $key => $item)
                                             <option value="{{ $key }}">{{ $item }}</option>
                                         @endforeach
@@ -386,13 +396,13 @@
                                                     <div class="invalid-feedback error-perdarahan"></div>
                                                 </td>
                                                 <td>
-                                                    <select name="tugor_kulit" id="tugor_kulit"
-                                                        class="form-control tugor_kulit">
+                                                    <select name="turgor_kulit" id="turgor_kulit"
+                                                        class="form-control turgor_kulit">
                                                         <option value="">Pilih tugor kulit...</option>
                                                         <option value="Baik">Baik</option>
                                                         <option value="Buruk">Buruk</option>
                                                     </select>
-                                                    <div class="invalid-feedback error-tugor_kulit"></div>
+                                                    <div class="invalid-feedback error-turgor_kulit"></div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -723,6 +733,7 @@
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -952,7 +963,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Extemitas atas dan bawah</td>
+                                                <td>Extremitas atas dan bawah</td>
                                                 <td>
                                                     <textarea name="extremitas_atas_bawah" id="extremitas_atas_bawah" class="form-control extremitas_atas_bawah"
                                                         rows="6" placeholder="masukkan hasil pemeriksaan fisik pada bagian extremitas atas dan bawah"></textarea>
@@ -1214,7 +1225,8 @@
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_2" id="catatan_keterangan_evaluasi_2"
-                                                        class="form-control catatan_keterangan_evaluasi_2" rows="6" placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        class="form-control catatan_keterangan_evaluasi_2" rows="6"
+                                                        placeholder="masukkan keterangan dan evaluasi"></textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1244,12 +1256,14 @@
                                                     </strong>
                                                     <ol>
                                                         <li>
+                                                            Farmakologi
                                                             <textarea name="farmakologi" id="farmakologi" class="form-control farmakologi" rows="6"
                                                                 placeholder="masukkan farmakologi"></textarea>
                                                         </li>
                                                         <li mt-2>
+                                                            Non farmakologi
                                                             <textarea name="non_farmakologi" id="non_farmakologi" class="form-control non_farmakologi" rows="6"
-                                                                placeholder="masukkan non_farmakologi"></textarea>
+                                                                placeholder="masukkan non farmakologi"></textarea>
                                                         </li>
                                                     </ol>
                                                 </td>
@@ -1694,6 +1708,35 @@
                     </div>
                     <!-- END: RINGKASAN KONDISI-->
 
+                    {{-- FILE SCAN --}}
+                    <div class="tab-pane" id="fileScan" role="tabpanel">
+                        <div class="row mt-4">
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+                                    <label class="form-label">File Scan Triase</label>
+                                    <input type="file" name="file_triase" id="file_triase"
+                                        class="form-control file_triase">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">File Scan Asesmen</label>
+                                    <input type="file" name="file_asesmen" id="file_asesmen"
+                                        class="form-control file_asesmen">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">File Scan Catatan Edukasi</label>
+                                    <input type="file" name="file_edukasi" id="file_edukasi"
+                                        class="form-control file_edukasi">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">File Scan Ringkasan Kondisi</label>
+                                    <input type="file" name="file_ringkasan" id="file_ringkasan"
+                                        class="form-control file_ringkasan">
+                                </div>
+                            </div>
+                        </div><!-- end row -->
+                    </div>
+                    <!-- END: FILE SCAN-->
+
                     <!-- START: Define your controller buttons here-->
                     <div class="d-flex wizard justify-content-between flex-wrap gap-2 mt-3">
                         <div class="first"><a href="javascript:void(0);" class="btn btn-secondary disabled">
@@ -1710,7 +1753,7 @@
                             </div>
                         </div>
                         <div class="last"><a href="javascript:void(0);"
-                                class="btn btn-secondary btn-save">Simpan</a></div>
+                                class="btn btn-secondary btn-finish">Simpan</a></div>
                     </div><!-- END: Define your controller buttons here-->
                     {{-- </form> --}}
                 </div>
@@ -1726,7 +1769,7 @@
         progress: true,
     });
 
-    let qrCodeSize = 128;
+    // let qrCodeSize = 128;
 
     // DETAIL PASIEN dan DOKTER
     $('#pasien_id').on('change', function() {
@@ -1849,6 +1892,8 @@
                 $('#tanggal_lahir_dokter').val(data.tanggal_lahir)
                 $('#jenis_kelamin_dokter').val(data.jenis_kelamin)
 
+                $('#dokter_asesmen').val(data.nama)
+
                 // TTD TRIASE
                 let ttd_dokter = '<p class="text-center">Dokter</p>';
                 ttd_dokter += '<p id="qrcode"></p>';
@@ -1968,6 +2013,8 @@
             $('#tempat_lahir_dokter').val('')
             $('#tanggal_lahir_dokter').val('')
             $('#jenis_kelamin_dokter').val('')
+
+            $('#dokter_asesmen').val('')
 
             let ttd_dokter = '<h3 class="text-center">Dokter belum dipilih</h3>';
             $('.ttd-dokter, .ttd-asesmen-dokter, .ttd-ringkasan-dokter').append(ttd_dokter);
