@@ -31,7 +31,7 @@
                 <!-- end -->
 
                 {{-- Triase --}}
-                <li class="nav-item" data-target-form="#triaseForm" role="presentation">
+                <li class="nav-item nav-triase" data-target-form="#triaseForm" role="presentation">
                     <a href="#triase" data-bs-toggle="tab" data-toggle="tab" class="nav-link icon-btn"
                         aria-selected="false" role="tab" tabindex="-1">
                         <i class="ph-duotone ph-map-pin"></i> <span class="d-none d-sm-inline">Triase</span>
@@ -40,7 +40,7 @@
                 <!-- end -->
 
                 {{-- Asesmen --}}
-                <li class="nav-item" data-target-form="#asesmenForm" role="presentation">
+                <li class="nav-item nav-asesmen" data-target-form="#asesmenForm" role="presentation">
                     <a href="#asesmen" data-bs-toggle="tab" data-toggle="tab" class="nav-link icon-btn"
                         aria-selected="false" role="tab" tabindex="-1">
                         <i class="ph-duotone ph-graduation-cap"></i>
@@ -50,7 +50,7 @@
                 <!-- end -->
 
                 {{-- Catatan Edukasi --}}
-                <li class="nav-item" data-target-form="#catatanEdukasiForm" role="presentation">
+                <li class="nav-item nav-edukasi" data-target-form="#catatanEdukasiForm" role="presentation">
                     <a href="#catatanEdukasi" data-bs-toggle="tab" data-toggle="tab" class="nav-link icon-btn"
                         aria-selected="false" role="tab" tabindex="-1">
                         <i class="ph-duotone ph-check-circle"></i>
@@ -60,7 +60,7 @@
                 <!-- end -->
 
                 {{-- Ringkasan --}}
-                <li class="nav-item" data-target-form="#ringkasanKondisiForm" role="presentation">
+                <li class="nav-item nav-ringkasan" data-target-form="#ringkasanKondisiForm" role="presentation">
                     <a href="#ringkasanKondisi" data-bs-toggle="tab" data-toggle="tab" class="nav-link icon-btn"
                         aria-selected="false" role="tab" tabindex="-1">
                         <i class="ph-duotone ph-check-circle"></i>
@@ -99,7 +99,9 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label" for="nama">Nama</label>
-                                    <select name="pasien_id" id="pasien_id" class="form-control pasien_id">
+                                    <input type="hidden" name="pasien_id_hidden"
+                                        class="form-control pasien_id_hidden" value="{{ $data->id }}">
+                                    <select name="pasien_id" id="pasien_id" class="form-control pasien_id" disabled>
                                         @foreach ($pasien as $key => $item)
                                             <option value="{{ $key }}"
                                                 {{ $key == $data->id ? 'selected' : '' }}>{{ $item }}</option>
@@ -157,6 +159,7 @@
                                                 {{ $item }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="invalid-feedback error-dokter_id"></div>
                                 </div>
                                 <div class="mb-3 data-dokter" hidden>
                                     <label class="form-label" for="sip">SIP</label>
@@ -215,7 +218,7 @@
                             <div class="col-sm-6 cara-datang-2"
                                 {{ $triase->cara_datang->option == 'Lain-lain' ? '' : 'hidden' }}>
                                 <div class="mb-3">
-                                    <label class="form-label text-white">Tujuan Rujukan</label>
+                                    <label class="form-label">Tujuan Rujukan</label>
                                     <input type="text" class="form-control cara_datang_lainnya"
                                         name="cara_datang_lainnya" id="cara_datang_lainnya"
                                         placeholder="masukkan cara datang"
@@ -645,7 +648,7 @@
                                     <label class="form-label">Tanggal</label>
                                     <input type="text" name="tanggal_asesmen"
                                         class="form-control datepicker-input tanggal_asesmen" id="tanggal_asesmen"
-                                        placeholder="masukkan tanggal" value="{{ $asesmen->tanggal }}">
+                                        placeholder="masukkan tanggal" value="{{ dateFormat($asesmen->tanggal) }}">
                                     <div class="invalid-feedback error-tanggal_asesmen"></div>
                                 </div>
                             </div>
@@ -1170,12 +1173,13 @@
                                                 <td rowspan="7" class="vertical-align-top">
                                                     <input type="text" name="tanggal_edukasi" id="tanggal_edukasi"
                                                         class="form-control tanggal_edukasi datepicker-input"
-                                                        placeholder="masukkan tanggal edukasi">
+                                                        placeholder="masukkan tanggal edukasi"
+                                                        value="{{ dateFormat($catatanEdukasi->tanggal) }}">
                                                     <div class="invalid-feedback error-tanggal_edukasi"></div>
                                                 </td>
                                                 <td rowspan="7" class="vertical-align-top">
                                                     <textarea name="nama_dan_hubungan" id="nama_dan_hubungan" class="form-control nama_dan_hubungan"
-                                                        placeholder="masukkan nama dan hubungan dengan pasien"></textarea>
+                                                        placeholder="masukkan nama dan hubungan dengan pasien">{{ $catatanEdukasi->nama_dan_hubungan }}</textarea>
                                                 </td>
                                                 <td class="vertical-align-top" class="vertical-align-top">
                                                     <select name="hambatan_dalam_komunikasi_1"
@@ -1184,14 +1188,18 @@
                                                         data-id="1" data-classname="hambatan_dalam_komunikasi_1">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->dokter_spesialis->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_1" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_1"
+                                                        {{ $catatanEdukasi->dokter_spesialis->hambatan->option == 'Ya' ? '' : 'hidden' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_1" id="hambatan_dalam_komunikasi_lainnya_1"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_1" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->dokter_spesialis->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_1">
                                                         </div>
@@ -1205,39 +1213,39 @@
                                                         <li>
                                                             Kondisi Pasien
                                                             <textarea name="catatan_kondisi_pasien" id="catatan_kondisi_pasien" class="form-control catatan_kondisi_pasien"
-                                                                rows="4" placeholder="masukkan kondisi pasien"></textarea>
+                                                                rows="4" placeholder="masukkan kondisi pasien">{{ $catatanEdukasi->dokter_spesialis->data->kondisi_pasien }}</textarea>
                                                         </li>
                                                         <li class="mt-2">
                                                             Hasil Pemerikasaan
                                                             <textarea name="catatan_hasil_pemeriksaan" id="catatan_hasil_pemeriksaan"
-                                                                class="form-control catatan_hasil_pemeriksaan" rows="4" placeholder="masukkan hasil pemeriksaan"></textarea>
+                                                                class="form-control catatan_hasil_pemeriksaan" rows="4" placeholder="masukkan hasil pemeriksaan">{{ $catatanEdukasi->dokter_spesialis->data->hasil_pemeriksaan }}</textarea>
                                                         </li>
                                                         <li class="mt-2">
                                                             Assessment
                                                             <textarea name="catatan_assessment" id="catatan_assessment" class="form-control catatan_assessment" rows="4"
-                                                                placeholder="masukkan assessment"></textarea>
+                                                                placeholder="masukkan assessment">{{ $catatanEdukasi->dokter_spesialis->data->assessment }}</textarea>
                                                         </li>
                                                         <li class="mt-2">
                                                             Rencana asuhan/ pengobatan/ tindakan medis
                                                             <textarea name="catatan_rencana_asuhan" id="catatan_rencana_asuhan" class="form-control catatan_rencana_asuhan"
-                                                                rows="4" placeholder="masukkan rencana asuhan/ pengobatan/ tindakan medis"></textarea>
+                                                                rows="4" placeholder="masukkan rencana asuhan/ pengobatan/ tindakan medis">{{ $catatanEdukasi->dokter_spesialis->data->rencana_asuhan }}</textarea>
                                                         </li>
                                                         <li class="mt-2">
                                                             Perkiraan hari rawat inap
                                                             <textarea name="catatan_perkiraan_hari" id="catatan_perkiraan_hari" class="form-control catatan_perkiraan_hari"
-                                                                rows="4" placeholder="masukkan perkiraan hari rawat inap"></textarea>
+                                                                rows="4" placeholder="masukkan perkiraan hari rawat inap">{{ $catatanEdukasi->dokter_spesialis->data->perkiraan_hari_rawat_inap }}</textarea>
                                                         </li>
                                                         <li class="mt-2">
                                                             Penjelasan komplikasi yang mungkin terjadi
                                                             <textarea name="catatan_penjelasan_komplikasi" id="catatan_penjelasan_komplikasi"
                                                                 class="form-control catatan_penjelasan_komplikasi" rows="4"
-                                                                placeholder="masukkan penjelasan komplikasi yang mungkin terjadi"></textarea>
+                                                                placeholder="masukkan penjelasan komplikasi yang mungkin terjadi">{{ $catatanEdukasi->dokter_spesialis->data->penjelasan_komplikasi }}</textarea>
                                                         </li>
                                                         <li class="mt-2">
                                                             Kemungkinan hasil yang tidak diharapkan
                                                             <textarea name="catatan_kemungkinan_hasil" id="catatan_kemungkinan_hasil"
                                                                 class="form-control catatan_kemungkinan_hasil" rows="4"
-                                                                placeholder="masukkan kemungkinan hasil yang tidak diharapkan"></textarea>
+                                                                placeholder="masukkan kemungkinan hasil yang tidak diharapkan">{{ $catatanEdukasi->dokter_spesialis->data->kemungkinan_hasil }}</textarea>
                                                         </li>
                                                     </ol>
                                                 </td>
@@ -1245,20 +1253,22 @@
                                                     <select name="catatan_metode_1" id="catatan_metode_1"
                                                         class="form-control catatan_metode_1">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->dokter_spesialis->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_1"
                                                         class="form-control catatan_durasi_1" id="catatan_durasi_1"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->dokter_spesialis->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_1" id="catatan_keterangan_evaluasi_1"
-                                                        class="form-control catatan_keterangan_evaluasi_1" rows="6" placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        class="form-control catatan_keterangan_evaluasi_1" rows="6" placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->dokter_spesialis->keterangan_evaluasi }}</textarea>
                                                 </td>
                                                 <td rowspan="7"
                                                     class="vertical-align-top text-center ttd-edukasi-dokter"
@@ -1276,14 +1286,18 @@
                                                         data-id="2" data-classname="hambatan_dalam_komunikasi_2">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->nutrisi->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_2" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_2"
+                                                        {{ $catatanEdukasi->nutrisi->hambatan->option == 'Ya' ? '' : 'hidden' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_2" id="hambatan_dalam_komunikasi_lainnya_2"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_2" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->nutrisi->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_2">
                                                         </div>
@@ -1294,26 +1308,28 @@
                                                         <p>Nutrisi</p>
                                                     </strong>
                                                     <textarea name="catatan_nutrisi" id="catatan_nutrisi" class="form-control catatan_nutrisi" rows="6"
-                                                        placeholder="masukkan nutrisi"></textarea>
+                                                        placeholder="masukkan nutrisi">{{ $catatanEdukasi->nutrisi->data->nutrisi }}</textarea>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <select name="catatan_metode_2" id="catatan_metode_2"
                                                         class="form-control catatan_metode_2">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->nutrisi->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_2"
                                                         class="form-control catatan_durasi_2" id="catatan_durasi_2"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->nutrisi->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_2" id="catatan_keterangan_evaluasi_2"
-                                                        class="form-control catatan_keterangan_evaluasi_2" rows="6" placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        class="form-control catatan_keterangan_evaluasi_2" rows="6" placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->nutrisi->keterangan_evaluasi }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1324,14 +1340,18 @@
                                                         data-id="3" data-classname="hambatan_dalam_komunikasi_3">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->manajemen_nyeri->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_3" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_3"
+                                                        {{ $catatanEdukasi->manajemen_nyeri->hambatan->option == 'Ya' ? '' : 'hidden' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_3" id="hambatan_dalam_komunikasi_lainnya_3"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_3" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->manajemen_nyeri->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_3">
                                                         </div>
@@ -1345,12 +1365,12 @@
                                                         <li>
                                                             Farmakologi
                                                             <textarea name="farmakologi" id="farmakologi" class="form-control farmakologi" rows="6"
-                                                                placeholder="masukkan farmakologi"></textarea>
+                                                                placeholder="masukkan farmakologi">{{ $catatanEdukasi->manajemen_nyeri->data->farmakologi }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Non farmakologi
                                                             <textarea name="non_farmakologi" id="non_farmakologi" class="form-control non_farmakologi" rows="6"
-                                                                placeholder="masukkan non farmakologi"></textarea>
+                                                                placeholder="masukkan non farmakologi">{{ $catatanEdukasi->manajemen_nyeri->data->non_farmakologi }}</textarea>
                                                         </li>
                                                     </ol>
                                                 </td>
@@ -1358,21 +1378,23 @@
                                                     <select name="catatan_metode_3" id="catatan_metode_3"
                                                         class="form-control catatan_metode_3">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->manajemen_nyeri->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_3"
                                                         class="form-control catatan_durasi_3" id="catatan_durasi_3"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->manajemen_nyeri->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_3" id="catatan_keterangan_evaluasi_3"
                                                         class="form-control catatan_keterangan_evaluasi_3" rows="6"
-                                                        placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->manajemen_nyeri->keterangan_evaluasi }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1383,14 +1405,18 @@
                                                         data-id="4" data-classname="hambatan_dalam_komunikasi_4">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->manajemen_nyeri->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_4" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_4"
+                                                        {{ $catatanEdukasi->manajemen_nyeri->hambatan->option == 'Ya' ? '' : 'hidden' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_4" id="hambatan_dalam_komunikasi_lainnya_4"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_4" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->farmasi->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_4">
                                                         </div>
@@ -1407,21 +1433,23 @@
                                                     <select name="catatan_metode_4" id="catatan_metode_4"
                                                         class="form-control catatan_metode_4">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->rohaniawan->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_4"
                                                         class="form-control catatan_durasi_4" id="catatan_durasi_4"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->rohaniawan->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_4" id="catatan_keterangan_evaluasi_4"
                                                         class="form-control catatan_keterangan_evaluasi_4" rows="6"
-                                                        placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->rohaniawan->keterangan_evaluasi }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1432,14 +1460,18 @@
                                                         data-id="5" data-classname="hambatan_dalam_komunikasi_5">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->rohaniawan->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_5" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_5"
+                                                        {{ $catatanEdukasi->rohaniawan->hambatan->option == 'Ya' ? '' : 'hidden' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_5" id="hambatan_dalam_komunikasi_lainnya_5"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_5" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->rohaniawan->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_5">
                                                         </div>
@@ -1453,28 +1485,28 @@
                                                         <li>
                                                             Nama obat, aturan pakai dan dosis obat
                                                             <textarea name="catatan_nama_obat" id="catatan_nama_obat" class="form-control catatan_nama_obat" rows="6"
-                                                                placeholder="masukkan deskripsi nama obat, aturan pakai dan dosis obat"></textarea>
+                                                                placeholder="masukkan deskripsi nama obat, aturan pakai dan dosis obat">{{ $catatanEdukasi->farmasi->data->nama_obat }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Cara penyimpanan obat
                                                             <textarea name="catatan_cara_penyimpanan" id="catatan_cara_penyimpanan"
                                                                 class="form-control catatan_cara_penyimpanan" rows="6"
-                                                                placeholder="masukkan deskripsi cara penyimpanan obat"></textarea>
+                                                                placeholder="masukkan deskripsi cara penyimpanan obat">{{ $catatanEdukasi->farmasi->data->cara_penyimpanan }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Efek samping obat
                                                             <textarea name="catatan_efek_samping" id="catatan_efek_samping" class="form-control catatan_efek_samping"
-                                                                rows="6" placeholder="masukkan deskripsi efek samping obat"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi efek samping obat">{{ $catatanEdukasi->farmasi->data->efek_samping }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Kontra indikasi obat
                                                             <textarea name="catatan_kontra_indikasi" id="catatan_kontra_indikasi" class="form-control catatan_kontra_indikasi"
-                                                                rows="6" placeholder="masukkan deskripsi kontra indikasi obat"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi kontra indikasi obat">{{ $catatanEdukasi->farmasi->data->kontra_indikasi }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Lain-lainnya
                                                             <textarea name="catatan_lain_lainnya" id="catatan_lain_lainnya" class="form-control catatan_lain_lainnya"
-                                                                rows="6" placeholder="masukkan deskripsi lain-lainnya"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi lain-lainnya">{{ $catatanEdukasi->farmasi->data->lain_lainnya }}</textarea>
                                                         </li>
                                                     </ol>
                                                 </td>
@@ -1482,21 +1514,23 @@
                                                     <select name="catatan_metode_5" id="catatan_metode_5"
                                                         class="form-control catatan_metode_5">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->farmasi->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_5"
                                                         class="form-control catatan_durasi_5" id="catatan_durasi_5"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->farmasi->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_5" id="catatan_keterangan_evaluasi_5"
                                                         class="form-control catatan_keterangan_evaluasi_5" rows="6"
-                                                        placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->farmasi->keterangan_evaluasi }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1507,14 +1541,18 @@
                                                         data-id="6" data-classname="hambatan_dalam_komunikasi_6">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->farmasi->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_6" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_6"
+                                                        {{ $catatanEdukasi->farmasi->hambatan->option == 'Ya' ? 'selected' : '' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_6" id="hambatan_dalam_komunikasi_lainnya_6"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_6" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->perawat->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_6">
                                                         </div>
@@ -1529,40 +1567,40 @@
                                                             Pendidikan kesehatan tentang
                                                             <textarea name="catatan_pendidikan_kesehatan" id="catatan_pendidikan_kesehatan"
                                                                 class="form-control catatan_pendidikan_kesehatan" rows="6"
-                                                                placeholder="masukkan deskripsi pendidikan kesehatan tentang"></textarea>
+                                                                placeholder="masukkan deskripsi pendidikan kesehatan tentang">{{ $catatanEdukasi->perawat->data->pendidikan_kesehatan }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Hak dan kewajiban pasien
                                                             <textarea name="catatan_hak_kewajiban" id="catatan_hak_kewajiban" class="form-control catatan_hak_kewajiban"
-                                                                rows="6" placeholder="masukkan deskripsi hak dan kewajiban pasien"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi hak dan kewajiban pasien">{{ $catatanEdukasi->perawat->data->hak_kewajiban }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Perawatan dirumah
                                                             <textarea name="catatan_perawatan_dirumah" id="catatan_perawatan_dirumah"
                                                                 class="form-control catatan_perawatan_dirumah" rows="6"
-                                                                placeholder="masukkan deskripsi perawatan dirumah"></textarea>
+                                                                placeholder="masukkan deskripsi perawatan dirumah">{{ $catatanEdukasi->perawat->data->perawatan_dirumah }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Perawatan luka
                                                             <textarea name="catatan_perawatan_luka" id="catatan_perawatan_luka" class="form-control catatan_perawatan_luka"
-                                                                rows="6" placeholder="masukkan deskripsi perawatan luka"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi perawatan luka">{{ $catatanEdukasi->perawat->data->perawatan_luka }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Keamanan penggunaan alat-alat kesehatan
                                                             <textarea name="catatan_keamanan_penggunaan_alat" id="catatan_keamanan_penggunaan_alat"
                                                                 class="form-control catatan_keamanan_penggunaan_alat" rows="6"
-                                                                placeholder="masukkan deskripsi keamanan penggunaan alat-alat kesehatan"></textarea>
+                                                                placeholder="masukkan deskripsi keamanan penggunaan alat-alat kesehatan">{{ $catatanEdukasi->perawat->data->keamanan_penggunaan_alat }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Keamanan lingkungan perawatan dirumah
                                                             <textarea name="catatan_keamanan_lingkungan" id="catatan_keamanan_lingkungan"
                                                                 class="form-control catatan_keamanan_lingkungan" rows="6"
-                                                                placeholder="masukkan deskripsi keamanan lingkungan perawatan dirumah"></textarea>
+                                                                placeholder="masukkan deskripsi keamanan lingkungan perawatan dirumah">{{ $catatanEdukasi->perawat->data->keamanan_lingkungan }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Lain-lainnya
                                                             <textarea name="catatan_lain_lainnya" id="catatan_lain_lainnya" class="form-control catatan_lain_lainnya"
-                                                                rows="6" placeholder="masukkan deskripsi lain-lainnya"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi lain-lainnya">{{ $catatanEdukasi->perawat->data->lain_lainnya }}</textarea>
                                                         </li>
                                                     </ol>
                                                 </td>
@@ -1570,21 +1608,23 @@
                                                     <select name="catatan_metode_6" id="catatan_metode_6"
                                                         class="form-control catatan_metode_6">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->perawat->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_6"
                                                         class="form-control catatan_durasi_6" id="catatan_durasi_6"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->perawat->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_6" id="catatan_keterangan_evaluasi_6"
                                                         class="form-control catatan_keterangan_evaluasi_6" rows="6"
-                                                        placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->perawat->keterangan_evaluasi }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1595,14 +1635,18 @@
                                                         data-id="7" data-classname="hambatan_dalam_komunikasi_7">
                                                         <option value="">Pilih hambatan dalam komunikasi...
                                                         </option>
-                                                        <option value="Ya">Ya</option>
-                                                        <option value="Tidak">Tidak</option>
+                                                        @foreach (hambatanKomunikasi() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->rehabilitas_medis->hambatan->option == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_7" hidden>
+                                                    <div class="mt-2 hambatan_dalam_komunikasi_lainnya_7"
+                                                        {{ $catatanEdukasi->rehabilitas_medis->hambatan->option == 'Ya' ? '' : 'hidden' }}>
                                                         <textarea name="hambatan_dalam_komunikasi_lainnya_7" id="hambatan_dalam_komunikasi_lainnya_7"
                                                             class="form-control hambatan_dalam_komunikasi_lainnya_7" rows="6"
-                                                            placeholder="masukkan deskripsi hambatan"></textarea>
+                                                            placeholder="masukkan deskripsi hambatan">{{ $catatanEdukasi->rehabilitas_medis->hambatan->deskripsi }}</textarea>
                                                         <div
                                                             class="invalid-feedback error-hambatan_dalam_komunikasi_lainnya_7">
                                                         </div>
@@ -1616,12 +1660,12 @@
                                                         <li>
                                                             Fisioterapi
                                                             <textarea name="catatan_fisioterapi" id="catatan_fisioterapi" class="form-control catatan_fisioterapi"
-                                                                rows="6" placeholder="masukkan deskripsi fisioterapi"></textarea>
+                                                                rows="6" placeholder="masukkan deskripsi fisioterapi">{{ $catatanEdukasi->rehabilitas_medis->data->fisioterapi }}</textarea>
                                                         </li>
                                                         <li mt-2>
                                                             Psikolog
                                                             <textarea name="catatan_psikolog" id="catatan_psikolog" class="form-control catatan_psikolog" rows="6"
-                                                                placeholder="masukkan deskripsi psikolog"></textarea>
+                                                                placeholder="masukkan deskripsi psikolog">{{ $catatanEdukasi->rehabilitas_medis->data->psikolog }}</textarea>
                                                         </li>
                                                     </ol>
                                                 </td>
@@ -1629,21 +1673,23 @@
                                                     <select name="catatan_metode_7" id="catatan_metode_7"
                                                         class="form-control catatan_metode_7">
                                                         <option value="">Pilih metode...</option>
-                                                        <option value="D">D</option>
-                                                        <option value="C">C</option>
-                                                        <option value="D">D</option>
-                                                        <option value="Demo">Demo</option>
+                                                        @foreach (metode() as $item)
+                                                            <option value="{{ $item }}"
+                                                                {{ $catatanEdukasi->rehabilitas_medis->metode == $item ? 'selected' : '' }}>
+                                                                {{ $item }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <input type="number" name="catatan_durasi_7"
                                                         class="form-control catatan_durasi_7" id="catatan_durasi_7"
-                                                        placeholder="masukkan durasi">
+                                                        placeholder="masukkan durasi"
+                                                        value="{{ $catatanEdukasi->rehabilitas_medis->durasi }}">
                                                 </td>
                                                 <td class="vertical-align-top">
                                                     <textarea name="catatan_keterangan_evaluasi_7" id="catatan_keterangan_evaluasi_7"
                                                         class="form-control catatan_keterangan_evaluasi_7" rows="6"
-                                                        placeholder="masukkan keterangan dan evaluasi"></textarea>
+                                                        placeholder="masukkan keterangan dan evaluasi">{{ $catatanEdukasi->rehabilitas_medis->keterangan_evaluasi }}</textarea>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -1675,7 +1721,7 @@
                                                 <td>S</td>
                                                 <td>
                                                     <textarea name="ringkasan_kondisi_s" id="ringkasan_kondisi_s" class="form-control ringkasan_kondisi_s"
-                                                        rows="6" placeholder="masukkan kondisi pasien S"></textarea>
+                                                        rows="6" placeholder="masukkan kondisi pasien S">{{ $ringkasanKondisi->keadaan_pasien->s }}</textarea>
                                                     <div class="invalid-feedback error-ringkasan_kondisi_s"></div>
                                                 </td>
                                             </tr>
@@ -1683,7 +1729,7 @@
                                                 <td>O</td>
                                                 <td>
                                                     <textarea name="ringkasan_kondisi_o" id="ringkasan_kondisi_o" class="form-control ringkasan_kondisi_o"
-                                                        rows="6" placeholder="masukkan kondisi pasien O"></textarea>
+                                                        rows="6" placeholder="masukkan kondisi pasien O">{{ $ringkasanKondisi->keadaan_pasien->o }}</textarea>
                                                     <div class="invalid-feedback error-ringkasan_kondisi_o"></div>
                                                 </td>
                                             </tr>
@@ -1691,7 +1737,7 @@
                                                 <td>A</td>
                                                 <td>
                                                     <textarea name="ringkasan_kondisi_a" id="ringkasan_kondisi_a" class="form-control ringkasan_kondisi_a"
-                                                        rows="6" placeholder="masukkan kondisi pasien A"></textarea>
+                                                        rows="6" placeholder="masukkan kondisi pasien A">{{ $ringkasanKondisi->keadaan_pasien->a }}</textarea>
                                                     <div class="invalid-feedback error-ringkasan_kondisi_a"></div>
                                                 </td>
                                             </tr>
@@ -1699,7 +1745,7 @@
                                                 <td>P</td>
                                                 <td>
                                                     <textarea name="ringkasan_kondisi_p" id="ringkasan_kondisi_p" class="form-control ringkasan_kondisi_p"
-                                                        rows="6" placeholder="masukkan kondisi pasien P"></textarea>
+                                                        rows="6" placeholder="masukkan kondisi pasien P">{{ $ringkasanKondisi->keadaan_pasien->p }}</textarea>
                                                     <div class="invalid-feedback error-ringkasan_kondisi_p"></div>
                                                 </td>
                                             </tr>
@@ -1714,49 +1760,54 @@
                                     <label class="form-label">Tindak lanjut asuhan</label>
                                     <select name="tindak_lanjut_asuhan" id="tindak_lanjut_asuhan"
                                         class="form-control tindak_lanjut_asuhan">
-                                        <option value="">Pilih tindak lanjut asuhan...</option>
-                                        <option value="Preventif">Preventif</option>
-                                        <option value="Kuratif">Kuratif</option>
-                                        <option value="Paliatif">Paliatif</option>
-                                        <option value="Rehabilitatif">Rehabilitatif</option>
+                                        @foreach (tindakLanjutAsuhan() as $item)
+                                            <option value="{{ $item }}"
+                                                {{ $item == $ringkasanKondisi->tindak_lanjut_asuhan ? 'selected' : '' }}>
+                                                {{ $item }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
 
                             {{-- Cara Keluar --}}
-                            <div class="col-sm-12 cara-keluar-1">
+                            <div
+                                class="{{ in_array($ringkasanKondisi->cara_keluar->option, ['Diperbolehkan Pulang', 'Dirujuk', 'Pindah Perawatan', 'Rawat Inap']) ? 'col-sm-6' : 'col-sm-12' }} cara-keluar-1">
                                 <div class="mb-3">
                                     <label class="form-label">Cara keluar</label>
                                     <select name="cara_keluar" id="cara_keluar" class="form-control cara_keluar">
-                                        <option value="">Pilih cara keluar...</option>
-                                        <option value="Diperbolehkan Pulang">Diperbolehkan Pulang</option>
-                                        <option value="Kabur">Kabur</option>
-                                        <option value="Permintaan Sendiri">Permintaan Sendiri</option>
-                                        <option value="Dirujuk">Dirujuk</option>
-                                        <option value="Pindah Perawatan">Pindah Perawatan</option>
-                                        <option value="Rawat Inap">Rawat Inap</option>
+                                        @foreach (caraKeluar() as $item)
+                                            <option value="{{ $item }}"
+                                                {{ $item == $ringkasanKondisi->cara_keluar->option ? 'selected' : '' }}>
+                                                {{ $item }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback error-cara_keluar"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 cara-keluar-2" hidden>
+                            <div class="col-sm-6 cara-keluar-2"
+                                {{ in_array($ringkasanKondisi->cara_keluar->option, ['Dirujuk', 'Pindah Perawatan', 'Rawat Inap']) ? '' : 'hidden' }}>
                                 <div class="mb-3">
                                     <label class="form-label">Tujuan</label>
                                     <input type="text" class="form-control cara_keluar_lainnya"
-                                        name="cara_keluar_lainnya" id="cara_keluar_lainnya" placeholder="">
+                                        name="cara_keluar_lainnya" id="cara_keluar_lainnya" placeholder=""
+                                        value="{{ $ringkasanKondisi->cara_keluar->deskripsi }}">
                                     <div class="invalid-feedback error-cara_keluar_lainnya"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 cara-keluar-3" hidden>
+                            <div class="col-sm-6 cara-keluar-3"
+                                {{ $ringkasanKondisi->cara_keluar->option == 'Diperbolehkan Pulang' ? '' : 'hidden' }}>
                                 <div class="mb-3">
                                     <label class="form-label text-white">.</label>
                                     <select name="cara_keluar_lainnya_3" id="cara_keluar_lainnya_3"
                                         class="form-control cara_keluar_lainnya_3">
                                         <option value="">Diperbolehkan untuk...</option>
-                                        <option value="Kontrol Kembali">Kontrol Kembali</option>
-                                        <option value="Kontrol Ke Fasilitas Kesehatan Primer">Kontrol Ke Fasilitas
-                                            Kesehatan Primer</option>
-                                        <option value="Tanpa Kontrol Kembali">Tanpa Kontrol Kembali</option>
+                                        @foreach (opsiCaraKeluar() as $item)
+                                            <option value="{{ $item }}"
+                                                {{ $item == $ringkasanKondisi->cara_keluar->deskripsi ? 'selected' : '' }}>
+                                                {{ $item }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback error-cara_keluar_lainnya_3"></div>
                                 </div>
@@ -1769,10 +1820,12 @@
                                     <select name="ringkasan_kondisi_keluar" id="ringkasan_kondisi_keluar"
                                         class="form-control ringkasan_kondisi_keluar">
                                         <option value="">Pilih kondisi keluar...</option>
-                                        <option value="Sembuh">Sembuh</option>
-                                        <option value="Membaik">Membaik</option>
-                                        <option value="Belum Sembuh">Belum Sembuh</option>
-                                        <option value="Meninggal">Meninggal</option>
+                                        @foreach (kondisiKeluar() as $item)
+                                            <option value="{{ $item }}"
+                                                {{ $item == $ringkasanKondisi->kondisi_keluar ? 'selected' : '' }}>
+                                                {{ $item }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -1803,21 +1856,25 @@
                                     <label class="form-label">File Scan Triase</label>
                                     <input type="file" name="file_triase" id="file_triase"
                                         class="form-control file_triase">
+                                    <span class="small text-muted">kosongkan jika dokumen tidak ada perubahan</span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">File Scan Asesmen</label>
                                     <input type="file" name="file_asesmen" id="file_asesmen"
                                         class="form-control file_asesmen">
+                                    <span class="small text-muted">kosongkan jika dokumen tidak ada perubahan</span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">File Scan Catatan Edukasi</label>
                                     <input type="file" name="file_edukasi" id="file_edukasi"
                                         class="form-control file_edukasi">
+                                    <span class="small text-muted">kosongkan jika dokumen tidak ada perubahan</span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">File Scan Ringkasan Kondisi</label>
                                     <input type="file" name="file_ringkasan" id="file_ringkasan"
                                         class="form-control file_ringkasan">
+                                    <span class="small text-muted">kosongkan jika dokumen tidak ada perubahan</span>
                                 </div>
                             </div>
                         </div><!-- end row -->
@@ -1840,7 +1897,8 @@
                             </div>
                         </div>
                         <div class="last"><a href="javascript:void(0);"
-                                class="btn btn-secondary btn-finish">Simpan</a></div>
+                                class="btn btn-secondary btn-update">Simpan</a></div>
+                        {{-- class="btn btn-secondary btn-finish">Simpan</a></div> --}}
                     </div><!-- END: Define your controller buttons here-->
                     {{-- </form> --}}
                 </div>
@@ -1860,7 +1918,18 @@
 
     // DETAIL PASIEN dan DOKTER
     $(document).ready(function() {
+        var currentDate = new Date();
         $('#pasien_id, #dokter_id').trigger('change');
+
+        // document.querySelector('#tanggal_triase').addEventListener('changeDate', function(event) {
+        //     console.log('asa')
+        //     const selectedDate = event.detail.date;
+
+        //     if (selectedDate > currentDate) {
+        //         alert('Tanggal tidak valid. Harap masukkan tanggal yang tidak lebih dari hari ini.');
+        //         this.value = ''; // Mengosongkan input jika tanggal tidak valid
+        //     }
+        // });
     });
     $('#pasien_id').on('change', function() {
         let pasienId = $(this).find(":selected").val()
@@ -2162,7 +2231,7 @@
 
 
     // START ASESMEN
-    // var currentDate = new Date();
+    var currentDate = new Date();
     new Datepicker(document.querySelector('#tanggal_asesmen'), {
         buttonClass: 'btn',
         // format: 'dd M yyyy',

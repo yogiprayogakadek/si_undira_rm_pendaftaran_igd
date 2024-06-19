@@ -39,11 +39,6 @@ $(document).ready(function () {
 
     // on save button
     $("body").on("click", ".btn-save", function (e) {
-        // $.ajaxSetup({
-        //     headers: {
-        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        //     },
-        // });
         let form = $("#formAdd")[0];
         let data = new FormData(form);
         Swal.fire({
@@ -72,7 +67,7 @@ $(document).ready(function () {
                         cache: false,
                     })
                         .done(function (response) {
-                            // getData();
+                            getData();
                             Swal.fire(
                                 response.title,
                                 response.message,
@@ -165,65 +160,100 @@ $(document).ready(function () {
 
     // on save update
     $("body").on("click", ".btn-update", function (e) {
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-        });
         let form = $("#formUpdate")[0];
         let data = new FormData(form);
-        $.ajax({
-            type: "POST",
-            url: "/dokumen/update",
-            data: data,
-            processData: false,
-            contentType: false,
-            cache: false,
-            beforeSend: function () {
-                $(".btn-update").html("Mohon tunggu...").prop("disabled", true);
-            },
-            done: function () {
-                $(".btn-update").html("Simpan").prop("disabled", false);
-            },
-            success: function (response) {
-                $(".form-control").removeClass("is-invalid");
-                Swal.fire(response.title, response.message, response.status);
-                if (response.status == "success") {
-                    getData();
-                }
-            },
-            error: function (error) {
-                let formName = [];
-                let errorName = [];
 
-                $.each($("#formUpdate").serializeArray(), function (i, field) {
-                    formName.push(field.name.replace(/\[|\]/g, ""));
-                });
-                if (error.status == 422) {
-                    if (error.responseJSON.errors) {
-                        $.each(
-                            error.responseJSON.errors,
-                            function (key, value) {
-                                errorName.push(key);
-                                if ($("." + key).val() == "") {
-                                    $("." + key).addClass("is-invalid");
-                                    $(".error-" + key).html(value);
-                                }
-                            }
-                        );
+        let arrayData = [
+            'tanggal_triase', 'jam_triase', 'tanggal_asesmen', 'jam_kedatangan_asesmen',
+            'waktu_pengkajian', 'tanggal_edukasi', 'dokter_id'
+        ];
+        let arrayError = [];
+        $.each(arrayData, function (index, value) {
+            if($('#' + value).val() == '') {
+                // if($('.nav-'+ value.split("_")[1]).find('.active').length == 0) {
+                //     $('.nav-'+ value.split("_")[1]).css({
+                //         'background-color': "red"
+                //     });
+                //     $('.nav-'+ value.split("_")[1]).find('span').css({
+                //         color: "white"
+                //     })
+                // } else {
+                //     $('.nav-'+ value.split("_")[1]).find('span').css({
+                //         color: "red"
+                //     })
+                // }
 
-                        $.each(formName, function (i, field) {
-                            if ($.inArray(field, errorName) == -1) {
-                                $("." + field).removeClass("is-invalid");
-                                $(".error-" + field).html("");
-                            } else {
-                                $("." + field).addClass("is-invalid");
-                            }
+                arrayError.push(value.replace(/\_/g, ' '))
+
+                $('.'+value).addClass('is-invalid')
+                $('.error-'+value).html('Mohon untuk mengisi field ini')
+            } else {
+                // $('.nav-'+ value.split("_")[1]).css({'background-color': ""})
+                // $('.nav-'+ value.split("_")[1]).find('span').css({
+                //     color: ""
+                // })
+                $('.'+value).removeClass('is-invalid')
+                $('.error-'+value).html('')
+            }
+
+            // console.log(arrayError)
+
+            if(arrayError.length > 0) {
+                let addSpace = arrayError.join().replace(/,/g, ", ")
+                let modifiedString = addSpace.replace(/, ([^,]*)$/, " dan $1");
+                modifiedString = modifiedString.replace(/dokter id/g, "dokter");
+                Swal.fire(
+                    'Gagal',
+                    'Mohon untuk melengkapi data ' + modifiedString,
+                    'error'
+                );
+            } else {
+                Swal.fire({
+                    icon: "warning",
+                    // icon: 'error',
+                    title: "Pastikan semua data yang diperlukan sudah terisi!",
+                    // text: 'hapus data',
+                    showCancelButton: true,
+                    confirmButtonText: "Simpan",
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            $.ajaxSetup({
+                                headers: {
+                                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                        "content"
+                                    ),
+                                },
+                            });
+                            $.ajax({
+                                type: "POST",
+                                url: "/dokumen/update",
+                                data: data,
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                            })
+                                .done(function (response) {
+                                    getData();
+                                    Swal.fire(
+                                        response.title,
+                                        response.message,
+                                        response.status
+                                    );
+                                })
+                                .fail(function (response) {
+                                    // toastr[response.status](response.message, response.title);
+                                    Swal.fire(
+                                        response.title,
+                                        response.message,
+                                        response.status
+                                    );
+                                });
                         });
-                    }
-                }
-                $(".btn-update").html("Simpan").prop("disabled", false);
-            },
+                    },
+                    allowOutsideClick: false,
+                });
+            }
         });
     });
 

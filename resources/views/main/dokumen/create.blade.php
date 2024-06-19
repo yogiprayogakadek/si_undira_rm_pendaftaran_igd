@@ -98,7 +98,9 @@
                         <div class="row mt-4">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label" for="nama">Nama</label>
+                                    <label class="form-label" for="nama">Nama <span
+                                            class="small text-muted">(nama pasien yang belum memiliki
+                                            dokumen)</span></label>
                                     <select name="pasien_id" id="pasien_id" class="form-control pasien_id">
                                         @foreach ($pasien as $key => $item)
                                             <option value="{{ $key }}">{{ $item }}</option>
@@ -1159,7 +1161,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="D">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>
@@ -1214,7 +1216,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="S">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>
@@ -1273,7 +1275,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="S">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>
@@ -1322,7 +1324,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="S">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>
@@ -1397,7 +1399,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="S">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>
@@ -1485,7 +1487,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="S">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>
@@ -1544,7 +1546,7 @@
                                                         <option value="">Pilih metode...</option>
                                                         <option value="D">D</option>
                                                         <option value="C">C</option>
-                                                        <option value="D">D</option>
+                                                        <option value="S">S</option>
                                                         <option value="Demo">Demo</option>
                                                     </select>
                                                 </td>

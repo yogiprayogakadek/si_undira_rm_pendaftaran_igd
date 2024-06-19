@@ -48,15 +48,20 @@
                                             <span class="pc-micon"><i class="fa-light fa-house-user"></i> </span><span
                                                 class="pc-mtext">Dashboard</span></a>
                                     </li>
+                                    <li class="pc-item {{ Request::is('/user') ? 'active' : '' }}">
+                                        <a href="{{ route('user.index') }}" class="pc-link">
+                                            <span class="pc-micon"><i class="fa-thin fa-users"></i></i>
+                                            </span><span class="pc-mtext">Pegguna</span></a>
+                                    </li>
                                     <li class="pc-item {{ Request::is('/dokter') ? 'active' : '' }}">
                                         <a href="{{ route('dokter.index') }}" class="pc-link">
-                                            <span class="pc-micon"><i class="fa-solid fa-user-doctor-hair-long"></i>
+                                            <span class="pc-micon"><i class="fa-thin fa-user-doctor-hair"></i></i>
                                             </span><span class="pc-mtext">Dokter</span></a>
                                     </li>
                                     <li class="pc-item {{ Request::is('/pasien') ? 'active' : '' }}">
                                         <a href="{{ route('pasien.index') }}" class="pc-link">
                                             <span class="pc-micon">
-                                                <i class="fa-regular fa-users-medical"></i>
+                                                <i class="fa-sharp fa-thin fa-users-medical"></i>
                                             </span><span class="pc-mtext">Pasien</span></a>
                                     </li>
                                     <li class="pc-item {{ Request::is('/dokumen') ? 'active' : '' }}">

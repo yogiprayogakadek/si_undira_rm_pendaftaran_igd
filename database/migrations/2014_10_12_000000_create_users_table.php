@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama', 100);
             $table->string('username', 20);
             $table->string('password', 100);
+            $table->char('nomor_telp', 16);
             $table->enum('level', ['Kepala RM', 'Staff RM']);
             $table->boolean('status')->default(true)->comment('Status pengguna, true = aktif, false = tidak aktif');
             $table->timestamps();

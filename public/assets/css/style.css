@@ -52,6 +52,11 @@ output {
     --bs-breakpoint-lg: 992px;
     --bs-breakpoint-xl: 1200px;
     --bs-breakpoint-xxl: 1400px;
+
+    --bs-nav-pills-link-active-bg: blue; /* Default background color */
+            --bs-nav-pills-link-active-color: white; /* Default text color */
+            --bs-nav-pills-link-active-bg-asemen: yellow; /* Background color when .nav-asemen is present */
+            --bs-nav-pills-link-active-color-asemen: black; /* Text color when .nav-asemen is present */
 }
 [data-pc-theme_contrast="true"] {
     --bs-body-bg: #ffffff;

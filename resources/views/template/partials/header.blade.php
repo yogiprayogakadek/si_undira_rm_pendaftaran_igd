@@ -1,10 +1,49 @@
+<!-- Modal -->
+<div class="modal fade" id="change-password-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Kata Sandi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formChangePassword">
+                    <div class="form-group current_password mb-3">
+                        <label class="form-label" for="current_password">Password Sekarang</label>
+                        <input type="password" name="current_password" class="form-control current_password"
+                            id="current_password" placeholder="masukkan password sekarang">
+                        <div class="invalid-feedback error-current_password"></div>
+                    </div>
+                    <div class="form-group new_password mb-3">
+                        <label class="form-label" for="new_password">Password Baru</label>
+                        <input type="password" name="new_password" class="form-control new_password" id="new_password"
+                            placeholder="masukkan password baru">
+                        <div class="invalid-feedback error-new_password"></div>
+                    </div>
+                    <div class="form-group confirm_password">
+                        <label class="form-label" for="confirm_password">Konfirmasi Password</label>
+                        <input type="password" name="confirm_password" class="form-control confirm_password"
+                            id="confirm_password" placeholder="masukkan ulang password">
+                        <div class="invalid-feedback error-confirm_password"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-outline btn-change-password mr-15">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- [ Header Topbar ] start -->
 <header class="pc-header">
     <div class="header-wrapper"><!-- [Mobile Media Block] start -->
         <div class="me-auto pc-mob-drp">
             <ul class="list-unstyled"><!-- ======= Menu collapse Icon ===== -->
-                <li class="pc-h-item pc-sidebar-collapse"><a href="#" class="pc-head-link ms-0" id="sidebar-hide"><i
-                            class="ti ti-menu-2"></i></a></li>
+                <li class="pc-h-item pc-sidebar-collapse"><a href="#" class="pc-head-link ms-0"
+                        id="sidebar-hide"><i class="ti ti-menu-2"></i></a></li>
                 <li class="pc-h-item pc-sidebar-popup"><a href="#" class="pc-head-link ms-0"
                         id="mobile-collapse"><i class="ti ti-menu-2"></i></a></li>
             </ul>
@@ -48,7 +87,8 @@
                                     <div class="simplebar-mask">
                                         <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
                                             <div class="simplebar-content-wrapper" tabindex="0" role="region"
-                                                aria-label="scrollable content" style="height: auto; overflow: hidden;">
+                                                aria-label="scrollable content"
+                                                style="height: auto; overflow: hidden;">
                                                 <div class="simplebar-content" style="padding: 0px;">
                                                     <div class="d-flex mb-1">
                                                         <div class="flex-shrink-0"><img
@@ -62,7 +102,8 @@
                                                     </div>
                                                     <hr class="border-secondary border-opacity-50">
                                                     <p class="text-span">Manage</p>
-                                                    <a href="#" class="dropdown-item"><span><svg
+                                                    <a href="javascript:void(0)"
+                                                        class="change-password dropdown-item"><span><svg
                                                                 class="pc-icon text-muted me-2">
                                                                 <use xlink:href="#custom-lock-outline"></use>
                                                             </svg> <span>Change Password</span></span></a>

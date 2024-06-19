@@ -148,3 +148,53 @@ function jenisNyeri()
     ];
     return $data;
 }
+
+function metode()
+{
+    $data = [
+        'D', 'C', 'S', 'Demo'
+    ];
+
+    return $data;
+}
+
+function hambatanKomunikasi()
+{
+    $data = [
+        'Ya',
+        'Tidak',
+    ];
+    return $data;
+}
+
+function tindakLanjutAsuhan()
+{
+    $data = [
+        'Preventif', 'Kuratif','Paliatif','Rehabilitatif'
+    ];
+    return $data;
+}
+
+function caraKeluar()
+{
+    $data = [
+        'Diperbolehkan Pulang', 'Kabur','Permintaan Sendiri','Dirujuk', 'Pindah Perawatan', 'Rawat Inap'
+    ];
+    return $data;
+}
+
+function opsiCaraKeluar()
+{
+    $data = [
+        'Kontrol Kembali', 'Kontrol Ke Fasilitas Kesehatan Primer','Tanpa Kontrol Kembali'
+    ];
+    return $data;
+}
+
+function kondisiKeluar()
+{
+    $data = [
+        'Sembuh', 'Membaik','Belum Sembuh','Meninggal'
+    ];
+    return $data;
+}

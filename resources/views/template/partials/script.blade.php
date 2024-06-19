@@ -6,5 +6,6 @@
 <script src="{{ asset('assets/js/pcoded.js') }}"></script>
 <script src="{{ asset('assets/js/feather.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/functions/main.js') }}"></script>
 
 @stack('script')
