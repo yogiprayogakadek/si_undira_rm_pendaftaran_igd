@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function qrGenerator($nama, $sip)
@@ -197,4 +198,36 @@ function kondisiKeluar()
         'Sembuh', 'Membaik','Belum Sembuh','Meninggal'
     ];
     return $data;
+}
+
+function dashboardData()
+{
+    $data = [
+        'pengguna', 'dokter', 'pasien', 'dokumen'
+    ];
+
+    return $data;
+}
+
+function logos()
+{
+    $data = [
+        'fa-thin fa-users',
+            'fa-thin fa-user-doctor-hair',
+            'fa-sharp fa-thin fa-users-medical',
+            'fa-thin fa-folder'
+    ];
+
+    return $data;
+}
+
+function totalData($param)
+{
+    // $data = [];
+    // foreach(dashboardData()['pengguna'] as $key => $item) {
+    //     $table = $item == 'pengguna' ? 'users' : $item;
+    //     $data[$item] = DB::table($table)->count();
+    // }
+    $table = $param == 'pengguna' ? 'users' : ($param == 'dokumen' ? 'triase' : $param);
+    return DB::table($table)->count();
 }

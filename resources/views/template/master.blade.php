@@ -1,5 +1,4 @@
-<html><!-- [Head] start -->
-
+<html>
 @include('template.partials.head')
 
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
@@ -16,7 +15,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="../dashboard/index.html">@yield('page-title')</a></li>
+                                <li class="breadcrumb-item"><a href="@yield('link')">@yield('page-title')</a></li>
                                 <li class="breadcrumb-item" aria-current="page">@yield('sub-page')</li>
                             </ul>
                         </div>
@@ -51,7 +50,7 @@
     <script>
         main_layout_change('vertical');
     </script>
-    @include('template.partials.template-setting')
+    {{-- @include('template.partials.template-setting') --}}
 </body>
 
 </html>

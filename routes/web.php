@@ -12,8 +12,8 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         });
 
     Route::controller('UserController')
-        ->prefix('/user')
-        ->name('user.')
+        ->prefix('/pengguna')
+        ->name('pengguna.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
@@ -70,7 +70,7 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         });
 
     // Change Password
-    Route::post('/user/change-password', 'UserController@changePassword')->name('user.change.password');
+    Route::post('/pengguna/change-password', 'UserController@changePassword')->name('user.change.password');
 });
 
 Auth::routes();

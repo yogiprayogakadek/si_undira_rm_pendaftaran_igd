@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fonts/font-awesome-pro.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('style')
 </head>

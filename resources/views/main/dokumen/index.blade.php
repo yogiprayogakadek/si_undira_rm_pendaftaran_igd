@@ -1,6 +1,7 @@
 @extends('template.master')
 
 @section('page-title', 'Dokumen')
+@section('link', 'dokumen')
 @section('sub-page', 'Home')
 @push('style')
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/dataTables.bootstrap5.min.css') }}">

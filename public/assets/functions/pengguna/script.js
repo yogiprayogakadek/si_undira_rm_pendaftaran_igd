@@ -1,7 +1,7 @@
 function getData() {
     $.ajax({
         type: "get",
-        url: "/user/render",
+        url: "/pengguna/render",
         dataType: "json",
         success: function (response) {
             $(".render").html(response.data);
@@ -15,7 +15,7 @@ function getData() {
 function tambah() {
     $.ajax({
         type: "get",
-        url: "/user/create",
+        url: "/pengguna/create",
         dataType: "json",
         success: function (response) {
             $(".render").html(response.data);
@@ -48,7 +48,7 @@ $(document).ready(function () {
         let data = new FormData(form);
         $.ajax({
             type: "POST",
-            url: "/user/store",
+            url: "/pengguna/store",
             data: data,
             processData: false,
             contentType: false,
@@ -105,7 +105,7 @@ $(document).ready(function () {
         let id = $(this).data('id')
         $.ajax({
             type: "get",
-            url: "/user/edit/" + id,
+            url: "/pengguna/edit/" + id,
             dataType: "json",
             success: function (response) {
                 $(".render").html(response.data);
@@ -127,7 +127,7 @@ $(document).ready(function () {
         let data = new FormData(form);
         $.ajax({
             type: "POST",
-            url: "/user/update",
+            url: "/pengguna/update",
             data: data,
             processData: false,
             contentType: false,
@@ -202,7 +202,7 @@ $(document).ready(function () {
                     });
                     $.ajax({
                             type: "POST",
-                            url: "/user/delete",
+                            url: "/pengguna/delete",
                             data: {
                                 id: id,
                             },

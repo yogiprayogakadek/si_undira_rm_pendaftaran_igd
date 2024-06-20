@@ -25,7 +25,8 @@
                                                     src="https://ableproadmin.com/assets/images/user/avatar-1.jpg"
                                                     alt="user-image" class="user-avtar wid-45 rounded-circle"></div>
                                             <div class="flex-grow-1 ms-3 me-2">
-                                                <h6 class="mb-0">Jonh Smith</h6><small>Administrator</small>
+                                                <h6 class="mb-0">{{ ucfirst(auth()->user()->username) }}</h6>
+                                                <small>{{ ucfirst(auth()->user()->level) }}</small>
                                             </div><a class="btn btn-icon btn-link-secondary avtar"
                                                 data-bs-toggle="collapse" href="#pc_sidebar_userlink"><svg
                                                     class="pc-icon">
@@ -33,12 +34,19 @@
                                                 </svg></a>
                                         </div>
                                         <div class="collapse pc-user-links" id="pc_sidebar_userlink">
-                                            <div class="pt-3"><a href="#!"><i class="ti ti-user"></i>
-                                                    <span>My Account</span> </a><a href="#!"><i
-                                                        class="ti ti-settings"></i> <span>Settings</span> </a><a
-                                                    href="#!"><i class="ti ti-lock"></i> <span>Lock
-                                                        Screen</span> </a><a href="#!"><i class="ti ti-power"></i>
-                                                    <span>Logout</span></a></div>
+                                            <div class="pt-3">
+                                                <a onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                                    href="{{ route('logout') }}">
+                                                    <i class="ti ti-power"></i>
+                                                    <span>Logout</span>
+                                                </a>
+                                                {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                    class="d-none">
+                                                    @csrf
+                                                </form> --}}
+                                            </div>
+                                            </a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -48,8 +56,8 @@
                                             <span class="pc-micon"><i class="fa-light fa-house-user"></i> </span><span
                                                 class="pc-mtext">Dashboard</span></a>
                                     </li>
-                                    <li class="pc-item {{ Request::is('/user') ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="pc-link">
+                                    <li class="pc-item {{ Request::is('/pengguna') ? 'active' : '' }}">
+                                        <a href="{{ route('pengguna.index') }}" class="pc-link">
                                             <span class="pc-micon"><i class="fa-thin fa-users"></i></i>
                                             </span><span class="pc-mtext">Pegguna</span></a>
                                     </li>

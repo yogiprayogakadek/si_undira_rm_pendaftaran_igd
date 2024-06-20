@@ -111,7 +111,7 @@
         let data = new FormData(form);
         $.ajax({
             type: "POST",
-            url: "/user/update-password",
+            url: "/pengguna/update-password",
             data: data,
             processData: false,
             contentType: false,

@@ -50,7 +50,7 @@
         </div><!-- [Mobile Media Block end] -->
         <div class="ms-auto">
             <ul class="list-unstyled">
-                <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
+                {{-- <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false"><svg class="pc-icon">
                             <use xlink:href="#custom-sun-1"></use>
@@ -62,12 +62,8 @@
                             onclick="layout_change('light')"><svg class="pc-icon">
                                 <use xlink:href="#custom-sun-1"></use>
                             </svg> <span>Light</span> </a>
-                        {{-- <a href="#!" class="dropdown-item" onclick="layout_change_default()"><svg
-                                class="pc-icon">
-                                <use xlink:href="#custom-setting-2"></use>
-                            </svg> <span>Default</span></a> --}}
                     </div>
-                </li>
+                </li> --}}
                 <li class="dropdown pc-h-item header-user-profile"><a
                         class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false"><img
@@ -87,8 +83,7 @@
                                     <div class="simplebar-mask">
                                         <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
                                             <div class="simplebar-content-wrapper" tabindex="0" role="region"
-                                                aria-label="scrollable content"
-                                                style="height: auto; overflow: hidden;">
+                                                aria-label="scrollable content" style="height: auto; overflow: hidden;">
                                                 <div class="simplebar-content" style="padding: 0px;">
                                                     <div class="d-flex mb-1">
                                                         <div class="flex-shrink-0"><img
@@ -96,8 +91,9 @@
                                                                 alt="user-image" class="user-avtar wid-35">
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <h6 class="mb-1">Carson Darrin 🖖</h6>
-                                                            <span>carson.darrin@company.io</span>
+                                                            <h6 class="mb-1">{{ ucfirst(auth()->user()->username) }}
+                                                                🖖</h6>
+                                                            <span>{{ ucfirst(auth()->user()->nama) }}</span>
                                                         </div>
                                                     </div>
                                                     <hr class="border-secondary border-opacity-50">
@@ -106,12 +102,22 @@
                                                         class="change-password dropdown-item"><span><svg
                                                                 class="pc-icon text-muted me-2">
                                                                 <use xlink:href="#custom-lock-outline"></use>
-                                                            </svg> <span>Change Password</span></span></a>
+                                                            </svg> <span>Ganti Password</span></span></a>
                                                     <hr class="border-secondary border-opacity-50">
-                                                    <div class="d-grid mb-3"><button class="btn btn-primary"><svg
-                                                                class="pc-icon me-2">
-                                                                <use xlink:href="#custom-logout-1-outline"></use>
-                                                            </svg>Logout</button></div>
+                                                    <div class="d-grid mb-3">
+                                                        <a onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                                            href="{{ route('logout') }}">
+                                                            <button class="btn btn-primary">
+                                                                <svg class="pc-icon me-2">
+                                                                    <use xlink:href="#custom-logout-1-outline"></use>
+                                                                </svg>Logout
+                                                            </button>
+                                                        </a>
+                                                        <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

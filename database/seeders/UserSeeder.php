@@ -17,7 +17,8 @@ class UserSeeder extends Seeder
             'nama' => 'Kepala Rekam Medis',
             'username' => 'kepalarm',
             'password' => bcrypt(12345678),
-            'level' => 'Kepala RM'
+            'level' => 'Kepala RM',
+            'nomor_telp' => '082237188990'
         ];
 
         User::create($user);

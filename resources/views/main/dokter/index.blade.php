@@ -2,6 +2,7 @@
 
 @section('page-title', 'Dokter')
 @section('sub-page', 'Home')
+@section('link', 'dokter')
 @push('style')
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/datepicker-bs5.min.css') }}">

@@ -1,73 +1,114 @@
-@extends('layouts.app')
+<!doctype html>
+<html lang="en">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<head>
+    <title>SI Rekam Medis | Pendaftaran IGD</title>
+    <link rel="icon" href="{{ asset('assets/images/logo.png') }}" sizes="any">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://preview.colorlib.com/theme/bootstrap/login-form-14/css/style.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+<body>
+    <section style="margin-top: 7em">
+        <div class="container">
+            {{-- <div class="row justify-content-center">
+                <div class="col-md-6 text-center">
+                    <h2 class="heading-section">
+                        <img src="{{ asset('assets/images/logo.png') }}" style="width: 150px">
+                    </h2>
+                </div>
+            </div> --}}
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                    <div class="wrap d-md-flex">
+                        <div class="img"
+                            style="background-image: url({{ asset('assets/images/backgorund.jpeg') }});">
                         </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
+                        <div class="login-wrap p-4 p-md-5">
+                            <div class="d-flex">
+                                <div class="w-100">
+                                    <h3 class="mb-4">Sign In</h3>
                                 </div>
                             </div>
+                            <form role="form" action="{{ route('login') }}" method="POST">
+                                @csrf
+                                <div class="form-group mb-3">
+                                    <label class="label" for="name">Username</label>
+                                    <input type="text" name="username" id="username"
+                                        class="form-control @error('username') is-invalid @enderror"
+                                        placeholder="Username" value="{{ old('username') }}">
+                                    @error('username')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="label" for="password">Password</label>
+                                    <input type="password" name="password" id="password"
+                                        class="form-control  @error('password') is-invalid @enderror"
+                                        placeholder="Password">
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign
+                                        In</button>
+                                </div>
+                                <div class="form-group d-md-flex">
+                                    <div class="w-50 text-left">
+                                        {{-- <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                        </label> --}}
+                                    </div>
+                                    <div class="w-50 text-md-right">
+                                        <a href="javascript::void(0)" class="forget-password">Forgot Password</a>
+                                    </div>
+                                </div>
+                            </form>
+                            {{-- <p class="text-center">Not a member? <a data-toggle="tab" href="#signup">Sign Up</a></p> --}}
                         </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-@endsection
+    </section>
+    <script src="https://preview.colorlib.com/theme/bootstrap/login-form-14/js/jquery.min.js"></script>
+    <script src="https://preview.colorlib.com/theme/bootstrap/login-form-14/js/popper.js"></script>
+    <script src="https://preview.colorlib.com/theme/bootstrap/login-form-14/js/bootstrap.min.js"></script>
+    <script src="https://preview.colorlib.com/theme/bootstrap/login-form-14/js/main.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"rayId":"893cdb541b906d1a","b":1,"version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}'
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('body').on('click', '.forget-password', function() {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true
+                }
+                toastr.info("Mohon menghubungi admin untuk pergantian password");
+            })
+            @if (Session::has('error'))
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true
+                }
+                toastr.error("{{ session('error') }}");
+            @endif
+        });
+    </script>
+</body>
+
+</html>
