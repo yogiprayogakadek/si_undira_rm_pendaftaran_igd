@@ -14,6 +14,7 @@ Route::namespace('Main')->middleware('auth')->group(function () {
     Route::controller('UserController')
         ->prefix('/pengguna')
         ->name('pengguna.')
+        ->middleware(['checkRole:Kepala RM'])
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
@@ -32,13 +33,15 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
-            Route::get('/create', 'create')->name('create');
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::post('/store', 'store')->name('store');
-            Route::post('/update', 'update')->name('update');
-            Route::post('/delete', 'delete')->name('delete');
+            Route::middleware(['checkRole:Staff RM'])(function() {
+                Route::get('/create', 'create')->name('create');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::post('/delete', 'delete')->name('delete');
 
-            Route::get('/detail/{id}', 'detail')->name('detail');
+                Route::get('/detail/{id}', 'detail')->name('detail');
+            });
         });
 
     Route::controller('DokterController')
@@ -47,13 +50,15 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
-            Route::get('/create', 'create')->name('create');
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::post('/store', 'store')->name('store');
-            Route::post('/update', 'update')->name('update');
-            Route::post('/delete', 'delete')->name('delete');
+            Route::middleware(['checkRole:Staff RM'])(function() {
+                Route::get('/create', 'create')->name('create');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::post('/delete', 'delete')->name('delete');
 
-            Route::get('/detail/{id}', 'detail')->name('detail');
+                Route::get('/detail/{id}', 'detail')->name('detail');
+            });
         });
 
     Route::controller('DokumenController')
@@ -62,11 +67,13 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
-            Route::get('/create', 'create')->name('create');
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::post('/store', 'store')->name('store');
-            Route::post('/update', 'update')->name('update');
-            Route::post('/delete', 'delete')->name('delete');
+            Route::middleware(['checkRole:Staff RM'])(function() {
+                Route::get('/create', 'create')->name('create');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::post('/delete', 'delete')->name('delete');
+            });
         });
 
     // Change Password

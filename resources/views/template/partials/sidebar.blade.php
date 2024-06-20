@@ -56,11 +56,13 @@
                                             <span class="pc-micon"><i class="fa-light fa-house-user"></i> </span><span
                                                 class="pc-mtext">Dashboard</span></a>
                                     </li>
-                                    <li class="pc-item {{ Request::is('/pengguna') ? 'active' : '' }}">
-                                        <a href="{{ route('pengguna.index') }}" class="pc-link">
-                                            <span class="pc-micon"><i class="fa-thin fa-users"></i></i>
-                                            </span><span class="pc-mtext">Pegguna</span></a>
-                                    </li>
+                                    @can('kepalarm')
+                                        <li class="pc-item {{ Request::is('/pengguna') ? 'active' : '' }}">
+                                            <a href="{{ route('pengguna.index') }}" class="pc-link">
+                                                <span class="pc-micon"><i class="fa-thin fa-users"></i></i>
+                                                </span><span class="pc-mtext">Pegguna</span></a>
+                                        </li>
+                                    @endcan
                                     <li class="pc-item {{ Request::is('/dokter') ? 'active' : '' }}">
                                         <a href="{{ route('dokter.index') }}" class="pc-link">
                                             <span class="pc-micon"><i class="fa-thin fa-user-doctor-hair"></i></i>

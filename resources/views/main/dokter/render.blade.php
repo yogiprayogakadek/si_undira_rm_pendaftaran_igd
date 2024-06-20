@@ -3,11 +3,13 @@
         <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Daftar Dokter</h5>
-                <button type="button" class="btn btn-shadow btn-primary btn-tambah">
-                    <svg class="pc-icon">
-                        <use xlink:href="#custom-add-outline"></use>
-                    </svg>Tambah Data
-                </button>
+                @can('staff')
+                    <button type="button" class="btn btn-shadow btn-primary btn-tambah">
+                        <svg class="pc-icon">
+                            <use xlink:href="#custom-add-outline"></use>
+                        </svg>Tambah Data
+                    </button>
+                @endcan
             </div>
         </div>
         <div class="card-body">
@@ -23,7 +25,9 @@
                             <th>Jenis Kelamin</th>
                             <th>No. Telepon</th>
                             <td>TTD</td>
-                            <th>Aksi</th>
+                            @can('staff')
+                                <th>Aksi</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody>
@@ -42,18 +46,20 @@
                                     {{-- <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate('Make me into an QrCode!')) !!} "> --}}
                                     {{ qrGenerator($dokter->nama, $dokter->sip) }}
                                 </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="button groups">
-                                        <button type="button" class="btn btn-light-success btn-edit"
-                                            data-id="{{ $dokter->id }}">
-                                            <i class="fa-duotone fa-pencil"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-light-danger btn-delete"
-                                            data-id="{{ $dokter->id }}">
-                                            <i class="fa-duotone fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
+                                @can('staff')
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="button groups">
+                                            <button type="button" class="btn btn-light-success btn-edit"
+                                                data-id="{{ $dokter->id }}">
+                                                <i class="fa-duotone fa-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-light-danger btn-delete"
+                                                data-id="{{ $dokter->id }}">
+                                                <i class="fa-duotone fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                @endcan
                             </tr>
                         @endforeach
                     </tbody>
