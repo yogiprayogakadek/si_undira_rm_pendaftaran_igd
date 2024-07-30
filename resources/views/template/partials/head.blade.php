@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" href="https://ableproadmin.com/assets/images/favicon.svg" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <!-- [Font] Family -->
     <link rel="stylesheet" href="{{ asset('assets/css/fonts/css/inter.css') }}" id="main-font-link">
     <!-- [Tabler Icons] https://tablericons.com -->

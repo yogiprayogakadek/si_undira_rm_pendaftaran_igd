@@ -33,7 +33,7 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
-            Route::middleware(['checkRole:Staff RM'])(function() {
+            Route::middleware(['checkRole:Staff RM'])->group(function() {
                 Route::get('/create', 'create')->name('create');
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::post('/store', 'store')->name('store');
@@ -50,7 +50,7 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
-            Route::middleware(['checkRole:Staff RM'])(function() {
+            Route::middleware(['checkRole:Staff RM'])->group(function() {
                 Route::get('/create', 'create')->name('create');
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::post('/store', 'store')->name('store');
@@ -67,7 +67,7 @@ Route::namespace('Main')->middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/render', 'render')->name('render');
-            Route::middleware(['checkRole:Staff RM'])(function() {
+            Route::middleware(['checkRole:Staff RM'])->group(function() {
                 Route::get('/create', 'create')->name('create');
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::post('/store', 'store')->name('store');

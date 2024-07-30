@@ -5,9 +5,15 @@
             <a href="{{ route('dashboard.index') }}" class="b-brand text-primary"><img
                     src="{{ asset('assets/images/logo.png') }}" class="img-fluid logo-lg"
                     style="width: 100px !important; height: 100px !important;" alt="logo">
+                <span class="badge bg-light-success rounded-pill ms-2 theme-version">RSD Mangusada</span>
                 {{-- <span>RS. Mangusada Badung</span> --}}
             </a>
         </div>
+        {{-- <div class="m-header">
+            <a href="../dashboard/index.html" class="b-brand text-primary">
+                <img src="../assets/images/logo-dark.svg" class="img-fluid logo-lg" alt="logo"> <span
+                    class="badge bg-light-success rounded-pill ms-2 theme-version">v9.4.1</span></a>
+        </div> --}}
         <div class="navbar-content pc-trigger active simplebar-scrollable-y" data-simplebar="init">
             <div class="simplebar-wrapper" style="margin: -10px 0px;">
                 <div class="simplebar-height-auto-observer-wrapper">
